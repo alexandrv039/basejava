@@ -11,34 +11,27 @@ public class ArrayStorage {
     }
 
     void save(Resume r) {
-        if (size == 10000) {
-            // ??? Exception?
+        if (size == storage.length) {
+            System.out.println("Индекс за пределами массива");
+            return;
         }
         storage[size] = r;
         size++;
     }
 
     Resume get(String uuid) {
-        Resume r = null;
         for (int i = 0; i < size; i++) {
-            Resume resume = storage[i];
-            if (resume == null) {
-                continue;
-            } else if (resume.uuid.equals(uuid)) {
-                r = resume;
-                break;
+            if (storage[i].uuid.equals(uuid)) {
+                return storage[i];
             }
-
         }
-        return r;
+        return null;
     }
 
     void delete(String uuid) {
         int index = -1;
         for (int i = 0; i < size; i++) {
-            if (storage[i] == null) {
-                continue;
-            } else if (storage[i].uuid.equals(uuid)) {
+            if (storage[i].uuid.equals(uuid)) {
                 index = i;
                 size--;
                 break;
@@ -46,9 +39,8 @@ public class ArrayStorage {
         }
 
         if (index > -1) {
-            for (int i = index; i < size; i++) {
-                Resume r = storage[i + 1];
-                storage[i] = r;
+            for (int i = index; i < size -1; i++) {
+                storage[i] = storage[i + 1];
             }
         }
 
