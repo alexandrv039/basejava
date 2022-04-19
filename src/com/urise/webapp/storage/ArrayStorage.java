@@ -19,8 +19,7 @@ public class ArrayStorage {
     public void save(Resume r) {
         if (size == storage.length) {
             System.out.println("Индекс за пределами массива");
-        }
-        else if (findIndexByUuid(r.getUuid()) > -1) {
+        } else if (findIndexByUuid(r.getUuid()) > -1) {
             System.out.println("Элемент с uuid: \"" + r.getUuid() + "\" уже добавлен");
         } else {
             storage[size] = r;
@@ -39,11 +38,12 @@ public class ArrayStorage {
 
     public Resume get(String uuid) {
         int index = findIndexByUuid(uuid);
-        Resume result = null;
         if (index == -1) {
             System.out.println("не найден элемент с uuid: \"" + uuid + "\"");
-        } else result = storage[index];
-        return result;
+            return null;
+        } else {
+            return storage[index];
+        }
     }
 
     public void delete(String uuid) {
@@ -52,8 +52,9 @@ public class ArrayStorage {
             storage[index] = storage[size - 1];
             storage[size - 1] = null;
             size--;
-        } else System.out.println("Элемент не найден, uuid: \"" + uuid + "\"");
-
+        } else {
+            System.out.println("Элемент не найден, uuid: \"" + uuid + "\"");
+        }
     }
 
     /**
@@ -75,5 +76,4 @@ public class ArrayStorage {
         }
         return -1;
     }
-
 }
