@@ -2,57 +2,57 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.model.Resume;
 
+import java.util.Arrays;
+
 /**
  * Array based storage for Resumes
  */
 public class ArrayStorage {
     private Resume[] storage = new Resume[10000];
-    private int size;
+    private int size = 0;
 
     public void clear() {
-        for (int i = 0; i < size; i++) {
-            storage[i] = null;
-        }
+        Arrays.fill(storage, 0, size, null);
         size = 0;
     }
 
     public void save(Resume r) {
         if (size == storage.length) {
             System.out.println("Индекс за пределами массива");
-            return;
         }
-        if (findResume(r) > -1) {
-            System.out.println("Элемент уже добавлен");
-            return;
+        else if (findIndexByUuid(r.getUuid()) > -1) {
+            System.out.println("Элемент с uuid: \"" + r.getUuid() + "\" уже добавлен");
+        } else {
+            storage[size] = r;
+            size++;
         }
-        storage[size] = r;
-        size++;
     }
 
     public void update(Resume resume) {
-        int index = findResume(resume);
+        int index = findIndexByUuid(resume.getUuid());
         if (index == -1) {
-            System.out.println("Нельзя обновить несуществующий элемент");
-            return;
+            System.out.println("Нельзя обновить несуществующий элемент, uuid: \"" + resume.getUuid() + "\"");
+        } else {
+            storage[index] = resume;
         }
-        storage[index] = resume;
     }
 
     public Resume get(String uuid) {
-        int index = findResumeByUuid(uuid);
-        return index > -1 ? storage[index] : null;
+        int index = findIndexByUuid(uuid);
+        Resume result = null;
+        if (index == -1) {
+            System.out.println("не найден элемент с uuid: \"" + uuid + "\"");
+        } else result = storage[index];
+        return result;
     }
 
     public void delete(String uuid) {
-        int index = findResumeByUuid(uuid);
-
+        int index = findIndexByUuid(uuid);
         if (index > -1) {
-            for (int i = index; i < size -1; i++) {
-                storage[i] = storage[i + 1];
-            }
+            storage[index] = storage[size - 1];
             storage[size - 1] = null;
             size--;
-        } else System.out.println("Элемент не найден");
+        } else System.out.println("Элемент не найден, uuid: \"" + uuid + "\"");
 
     }
 
@@ -60,38 +60,20 @@ public class ArrayStorage {
      * @return array, contains only Resumes in storage (without null)
      */
     public Resume[] getAll() {
-        Resume[] resumes = new Resume[size];
-        for (int i = 0; i < size; i++) {
-            resumes[i] = storage[i];
-        }
-        return resumes;
+        return Arrays.copyOf(storage, size);
     }
 
     public int size() {
         return size;
     }
 
-
-    private int findResumeByUuid(String uuid) {
-        int index = -1;
+    private int findIndexByUuid(String uuid) {
         for (int i = 0; i < size; i++) {
             if (storage[i].getUuid().equals(uuid)) {
-                index = i;
-                break;
+                return i;
             }
         }
-        return index;
-    }
-
-    private int findResume(Resume resume) {
-        int index = -1;
-        for (int i = 0; i < size; i++) {
-            if (storage[i] == resume) {
-                index = i;
-                break;
-            }
-        }
-        return index;
+        return -1;
     }
 
 }
