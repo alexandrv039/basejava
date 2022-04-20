@@ -8,7 +8,8 @@ import java.util.Arrays;
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    private Resume[] storage = new Resume[10000];
+    private static final int STORAGE_LIMIT = 10000;
+    private Resume[] storage = new Resume[STORAGE_LIMIT];
     private int size = 0;
 
     public void clear() {
@@ -17,7 +18,7 @@ public class ArrayStorage {
     }
 
     public void save(Resume r) {
-        if (size == storage.length) {
+        if (size == STORAGE_LIMIT) {
             System.out.println("Индекс за пределами массива");
         } else if (findIndexByUuid(r.getUuid()) > -1) {
             System.out.println("Элемент с uuid: \"" + r.getUuid() + "\" уже добавлен");
