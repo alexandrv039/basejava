@@ -33,6 +33,25 @@ public abstract class AbstractArrayStorage implements Storage{
         size = 0;
     }
 
+    public void update(Resume resume) {
+        int index = getIndex(resume.getUuid());
+        if (index < 0) {
+            System.out.println("Нельзя обновить несуществующий элемент, uuid: \"" + resume.getUuid() + "\"");
+        } else {
+            storage[index] = resume;
+        }
+    }
+
+    public void delete(String uuid) {
+        int index = getIndex(uuid);
+        if (index > -1) {
+            size--;
+            System.arraycopy(storage, index + 1, storage, index, size);
+        } else {
+            System.out.println("Элемент не найден, uuid: \"" + uuid + "\"");
+        }
+    }
+
     /**
      * @return array, contains only Resumes in storage (without null)
      */
