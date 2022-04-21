@@ -12,11 +12,6 @@ public class ArrayStorage extends AbstractArrayStorage{
     private final Resume[] storage = new Resume[STORAGE_LIMIT];
     private int size = 0;
 
-    public void clear() {
-        Arrays.fill(storage, 0, size, null);
-        size = 0;
-    }
-
     public void save(Resume r) {
         if (size == STORAGE_LIMIT) {
             System.out.println("Индекс за пределами массива");
@@ -46,13 +41,6 @@ public class ArrayStorage extends AbstractArrayStorage{
         } else {
             System.out.println("Элемент не найден, uuid: \"" + uuid + "\"");
         }
-    }
-
-    /**
-     * @return array, contains only Resumes in storage (without null)
-     */
-    public Resume[] getAll() {
-        return Arrays.copyOf(storage, size);
     }
 
     @Override

@@ -5,3 +5,8 @@ log
 
 
 
+/bin/production/basejava/com/urise/webapp/storage/AbstractArrayStorage.class
+/bin/production/basejava/com/urise/webapp/storage/ArrayStorage.class
+/bin/production/basejava/com/urise/webapp/MainTestArrayStorage.class
+/bin/production/basejava/com/urise/webapp/storage/SortedArrayStorage.class
+/bin/production/basejava/com/urise/webapp/storage/Storage.class
