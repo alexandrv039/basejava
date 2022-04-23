@@ -5,6 +5,8 @@ import com.urise.webapp.storage.ArrayStorage;
 import com.urise.webapp.storage.SortedArrayStorage;
 import com.urise.webapp.storage.Storage;
 
+import static com.urise.webapp.MainArray.printAll;
+
 /**
  * Test for your ArrayStorage implementation
  */
