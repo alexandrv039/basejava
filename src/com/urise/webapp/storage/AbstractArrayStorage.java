@@ -8,9 +8,7 @@ import java.util.Arrays;
  * Array based storage for Resumes
  */
 public abstract class AbstractArrayStorage implements Storage{
-
     protected static final int STORAGE_LIMIT = 10000;
-
     protected final Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
 
@@ -45,8 +43,7 @@ public abstract class AbstractArrayStorage implements Storage{
     public void delete(String uuid) {
         int index = getIndex(uuid);
         if (index > -1) {
-            size--;
-            System.arraycopy(storage, index + 1, storage, index, size);
+            deleteResumeFromIndex(index);
         } else {
             System.out.println("Элемент не найден, uuid: \"" + uuid + "\"");
         }
@@ -59,6 +56,20 @@ public abstract class AbstractArrayStorage implements Storage{
         return Arrays.copyOf(storage, size);
     }
 
+    public void save(Resume r) {
+        if (size == STORAGE_LIMIT) {
+            System.out.println("Индекс за пределами массива");
+        } else if (getIndex(r.getUuid()) > -1) {
+            System.out.println("Элемент с uuid: \"" + r.getUuid() + "\" уже добавлен");
+        } else {
+            addResumeInIndex(getIndex(r.getUuid()), r);
+        }
+    }
+
     protected abstract int getIndex(String uuid);
+
+    protected abstract void addResumeInIndex(int index, Resume resume);
+
+    protected abstract void deleteResumeFromIndex(int index);
 
 }
