@@ -45,8 +45,8 @@ public abstract class AbstractArrayStorage implements Storage{
     public void delete(String uuid) {
         int index = getIndex(uuid);
         if (index > -1) {
-            size--;
             doDelete(index);
+            size--;
         } else {
             throw new NotExistStorageException(uuid);
         }

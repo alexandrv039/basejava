@@ -107,5 +107,4 @@ public class MainArray {
         System.out.println("Массив заполнен, всего добавлено элементов: " + i);
 
     }
-
 }
