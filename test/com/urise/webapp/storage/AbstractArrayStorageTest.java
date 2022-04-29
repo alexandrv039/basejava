@@ -74,7 +74,7 @@ public abstract class AbstractArrayStorageTest {
     }
 
     @Test(expected = NotExistStorageException.class)
-    public void deleteNotExist(){
+    public void deleteNotExist() {
         storage.delete(DUMMY);
     }
 
@@ -107,7 +107,7 @@ public abstract class AbstractArrayStorageTest {
                 storage.save(new Resume("uuid" + i));
             }
         } catch (StorageException exception) {
-                Assert.fail("Переполнение произошло раньше времени: " + exception.getStackTrace());
+            Assert.fail("Переполнение произошло раньше времени: " + exception.getStackTrace());
         }
         storage.save(new Resume());
     }
