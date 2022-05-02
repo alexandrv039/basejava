@@ -4,8 +4,6 @@ import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
 
-import java.util.Objects;
-
 public abstract class AbstractStorage implements Storage{
 
     public void update(Resume resume){
@@ -39,9 +37,9 @@ public abstract class AbstractStorage implements Storage{
 
     protected abstract void doSave(Object key, Resume r);
 
-    public abstract boolean keyIsExist(Object key);
+    protected abstract boolean keyIsExist(Object key);
 
-    public abstract void doUpdate(Object key, Resume resume);
+    protected abstract void doUpdate(Object key, Resume resume);
 
     public abstract Object getKey(String searchString);
 }

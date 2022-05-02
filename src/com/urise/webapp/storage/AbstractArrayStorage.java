@@ -32,7 +32,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     public Resume get(String uuid) {
-        int index = getIndex(uuid);
+        int index = getKey(uuid);
         if (index < 0) {
             throw new NotExistStorageException(uuid);
         } else {
@@ -46,12 +46,12 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    public boolean keyIsExist(Object key) {
+    protected boolean keyIsExist(Object key) {
         return (int)key >= 0;
     }
 
     @Override
-    public void doUpdate(Object key, Resume resume) {
+    protected void doUpdate(Object key, Resume resume) {
         storage[(Integer) key] = resume;
     }
 
