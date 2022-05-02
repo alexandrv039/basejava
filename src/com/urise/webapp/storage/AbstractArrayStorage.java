@@ -10,13 +10,25 @@ import java.util.Arrays;
 /**
  * Array based storage for Resumes
  */
-public abstract class AbstractArrayStorage implements Storage {
+public abstract class AbstractArrayStorage extends AbstractStorage {
     protected static final int STORAGE_LIMIT = 10000;
     protected final Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
 
     public int size() {
         return size;
+    }
+
+    public void clear() {
+        Arrays.fill(storage, 0, size, null);
+        size = 0;
+    }
+
+    /**
+     * @return array, contains only Resumes in storage (without null)
+     */
+    public Resume[] getAll() {
+        return Arrays.copyOf(storage, size);
     }
 
     public Resume get(String uuid) {
@@ -28,52 +40,34 @@ public abstract class AbstractArrayStorage implements Storage {
         }
     }
 
-    public void clear() {
-        Arrays.fill(storage, 0, size, null);
-        size = 0;
+    @Override
+    public Integer getKey(String uuid) {
+        return getIndex(uuid);
     }
 
-    public void update(Resume resume) {
-        int index = getIndex(resume.getUuid());
-        if (index < 0) {
-            throw new NotExistStorageException(resume.getUuid());
-        } else {
-            storage[index] = resume;
-        }
+    @Override
+    public boolean keyIsExist(Object key) {
+        return (int)key >= 0;
     }
 
-    public void delete(String uuid) {
-        int index = getIndex(uuid);
-        if (index > -1) {
-            doDelete(index);
-            size--;
-        } else {
-            throw new NotExistStorageException(uuid);
-        }
+    @Override
+    public void doUpdate(Object key, Resume resume) {
+        storage[(Integer) key] = resume;
     }
 
-    /**
-     * @return array, contains only Resumes in storage (without null)
-     */
-    public Resume[] getAll() {
-        return Arrays.copyOf(storage, size);
-    }
-
-    public void save(Resume r) {
+    @Override
+    protected void doSave(Object key, Resume r) {
         if (size == STORAGE_LIMIT) {
             throw new StorageException("Storage overflow", r.getUuid());
-        } else if (getIndex(r.getUuid()) > -1) {
+        } else if (getKey(r.getUuid()) > -1) {
             throw new ExistStorageException(r.getUuid());
         } else {
-            doSave(getIndex(r.getUuid()), r);
+            addResume(getKey(r.getUuid()), r);
             size++;
         }
     }
 
     protected abstract int getIndex(String uuid);
 
-    protected abstract void doSave(int index, Resume resume);
-
-    protected abstract void doDelete(int index);
-
+    protected abstract void addResume(Integer index, Resume resume);
 }
