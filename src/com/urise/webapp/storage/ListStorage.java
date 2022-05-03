@@ -1,12 +1,9 @@
 package com.urise.webapp.storage;
 
-import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
-import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ListStorage extends AbstractStorage {
@@ -24,6 +21,11 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
+    protected Object doGet(Object key) {
+        return list.get((Integer)key);
+    }
+
+    @Override
     protected void doUpdate(Object key, Resume resume) {
         list.set((Integer)key, resume);
     }
@@ -31,16 +33,6 @@ public class ListStorage extends AbstractStorage {
     @Override
     public void clear() {
         list.clear();
-    }
-
-    @Override
-    public Resume get(String uuid) {
-        int key = getKey(uuid);
-        if (keyIsExist(key)) {
-            return list.get(key);
-        } else {
-            throw new NotExistStorageException(uuid);
-        }
     }
 
     @Override
@@ -54,7 +46,7 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected boolean keyIsExist(Object key) {
+    protected boolean isExist(Object key) {
         return (Integer)key >= 0;
     }
 

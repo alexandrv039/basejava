@@ -1,7 +1,6 @@
 package com.urise.webapp.storage;
 
 import com.urise.webapp.exception.ExistStorageException;
-import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
@@ -31,23 +30,14 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         return Arrays.copyOf(storage, size);
     }
 
-    public Resume get(String uuid) {
-        int index = getKey(uuid);
-        if (index < 0) {
-            throw new NotExistStorageException(uuid);
-        } else {
-            return storage[index];
-        }
-    }
-
     @Override
     public Integer getKey(String uuid) {
         return getIndex(uuid);
     }
 
     @Override
-    protected boolean keyIsExist(Object key) {
-        return (int)key >= 0;
+    protected boolean isExist(Object key) {
+        return (int) key >= 0;
     }
 
     @Override
@@ -62,12 +52,17 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         } else if (getKey(r.getUuid()) > -1) {
             throw new ExistStorageException(r.getUuid());
         } else {
-            addResume(getKey(r.getUuid()), r);
+            insertResume(getKey(r.getUuid()), r);
             size++;
         }
     }
 
+    @Override
+    protected Resume doGet(Object key) {
+        return storage[(Integer) key];
+    }
+
     protected abstract int getIndex(String uuid);
 
-    protected abstract void addResume(Integer index, Resume resume);
+    protected abstract void insertResume(Integer index, Resume resume);
 }
