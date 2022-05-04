@@ -1,16 +1,14 @@
 package com.urise.webapp;
 
+import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
-import com.urise.webapp.storage.ArrayStorage;
-import com.urise.webapp.storage.ListStorage;
-import com.urise.webapp.storage.SortedArrayStorage;
-import com.urise.webapp.storage.Storage;
+import com.urise.webapp.storage.*;
 
 /**
  * Test for your ArrayStorage implementation
  */
 public class MainTestArrayStorage {
-    private static final Storage ARRAY_STORAGE = new ListStorage();
+    private static final Storage ARRAY_STORAGE = new MapStorage();
 
     public static void main(String[] args) {
         final Resume r1 = new Resume("uuid1");
@@ -31,7 +29,11 @@ public class MainTestArrayStorage {
 
         System.out.println("Size: " + ARRAY_STORAGE.size());
 
-        System.out.println("Get dummy: " + ARRAY_STORAGE.get("dummy"));
+        try {
+            System.out.println("Get dummy: " + ARRAY_STORAGE.get("dummy"));
+        } catch (NotExistStorageException e) {
+            System.out.println("получение записи по ключу 'dummy' привело к ошибке: " + e.getMessage());
+        }
 
         Resume r4Update = new Resume("uuid4");
         ARRAY_STORAGE.update(r4Update);
