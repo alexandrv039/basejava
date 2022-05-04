@@ -1,6 +1,5 @@
 package com.urise.webapp.storage;
 
-import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
 
 import java.util.ArrayList;
@@ -52,8 +51,7 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     public Integer getKey(String searchString) {
-        for (int i = 0; i < list.size(); i++
-             ) {
+        for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getUuid().equals(searchString)) {
                 return i;
             }

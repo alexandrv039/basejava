@@ -7,26 +7,26 @@ import com.urise.webapp.model.Resume;
 public abstract class AbstractStorage implements Storage {
 
     public Object get(String uuid) {
-        Object key = notExistStorage(uuid);
+        Object key = getNotExistKey(uuid);
         return doGet(key);
     }
 
     public void update(Resume resume) {
-        Object key = notExistStorage(resume.getUuid());
+        Object key = getNotExistKey(resume.getUuid());
         doUpdate(key, resume);
     }
 
     public void save(Resume r) {
-        Object key = existStorage(r.getUuid());
+        Object key = getExistKey(r.getUuid());
         doSave(key, r);
     }
 
     public void delete(String uuid) {
-        Object key = notExistStorage(uuid);
+        Object key = getNotExistKey(uuid);
         doDelete(key);
     }
 
-    private Object existStorage(String uuid) {
+    private Object getExistKey(String uuid) {
         Object key = getKey(uuid);
         if (isExist(key)) {
             throw new ExistStorageException(uuid);
@@ -34,7 +34,7 @@ public abstract class AbstractStorage implements Storage {
         return key;
     }
 
-    private Object notExistStorage(String uuid) {
+    private Object getNotExistKey(String uuid) {
         Object key = getKey(uuid);
         if (!isExist(key)) {
             throw new NotExistStorageException(uuid);

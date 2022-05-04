@@ -2,8 +2,6 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.model.Resume;
 
-import java.util.ArrayList;
-
 /**
  * Array based storage for Resumes
  */
@@ -26,9 +24,8 @@ public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
     protected void doDelete(Object index) {
-        storage[(int)index] = storage[size - 1];
+        storage[(int) index] = storage[size - 1];
         storage[size - 1] = null;
         size--;
     }
-
 }
