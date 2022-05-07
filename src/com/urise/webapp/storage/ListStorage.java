@@ -35,8 +35,8 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    public Resume[] getAll() {
-        return list.toArray(Resume[]::new);
+    public List<Resume> getAll() {
+        return list;
     }
 
     @Override
@@ -57,5 +57,10 @@ public class ListStorage extends AbstractStorage {
             }
         }
         return -1;
+    }
+
+    @Override
+    protected String getSearchString(Resume resume) {
+        return resume.getUuid();
     }
 }

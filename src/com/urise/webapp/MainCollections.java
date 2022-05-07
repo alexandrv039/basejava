@@ -34,9 +34,6 @@ public class MainCollections {
         map.put(UUID_2, RESUME_2);
         map.put(UUID_3, RESUME_3);
 
-        for (Map.Entry<String, Resume> entry : map.entrySet()) {
-
-        }
-
+        List<Resume> resumes = Arrays.asList(RESUME_1, RESUME_2, RESUME_3);
     }
 }

@@ -7,7 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MapStorage extends AbstractStorage {
+public class MapStorageNameSearch extends AbstractStorage {
 
     private Map<String, Resume> map = new LinkedHashMap<>();
 
@@ -18,7 +18,7 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     protected void doSave(Object key, Resume r) {
-        map.put((String) key, r);
+        map.put(r.getUuid(), r);
     }
 
     @Override
@@ -28,17 +28,23 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     protected void doUpdate(Object key, Resume resume) {
-        map.put((String) key, resume);
+        map.put(resume.getUuid(), resume);
     }
 
     @Override
     public String getKey(String searchString) {
-        return searchString;
+        for (Map.Entry<String, Resume> entry: map.entrySet()
+             ) {
+            if (entry.getValue().getFullName().equals(searchString)) {
+                return entry.getKey();
+            }
+        }
+        return null;
     }
 
     @Override
     protected String getSearchString(Resume resume) {
-        return resume.getUuid();
+        return resume.getFullName();
     }
 
     @Override

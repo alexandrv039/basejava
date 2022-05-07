@@ -7,18 +7,22 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import java.util.List;
 
 public class AbstractStorageTest {
     protected Storage storage;
     protected static final String UUID_1 = "uuid1";
-    protected static final Resume RESUME_1 = new Resume(UUID_1);
+    protected static final String NAME_1 = "Andrey";
+    protected static final Resume RESUME_1 = new Resume(UUID_1, NAME_1);
     protected static final String UUID_2 = "uuid2";
-    protected static final Resume RESUME_2 = new Resume(UUID_2);
+    protected static final String NAME_2 = "John";
+    protected static final Resume RESUME_2 = new Resume(UUID_2, NAME_2);
     protected static final String UUID_3 = "uuid3";
-    protected static final Resume RESUME_3 = new Resume(UUID_3);
+    protected static final String NAME_3 = "Leo";
+    protected static final Resume RESUME_3 = new Resume(UUID_3, NAME_3);
     protected static final String UUID_4 = "uuid4";
-    protected static final Resume RESUME_4 = new Resume(UUID_4);
+    protected static final String NAME_4 = "Alex";
+    protected static final Resume RESUME_4 = new Resume(UUID_4, NAME_4);
     protected static final String UUID_NOT_EXIST = "dummy";
 
     public AbstractStorageTest(Storage storage) {
@@ -75,11 +79,11 @@ public class AbstractStorageTest {
     }
 
     @Test
-    public void getAll() {
-        Resume[] resumes = storage.getAll();
-        Assert.assertEquals(3, resumes.length);
+    public void getAllSorted() {
+        List resumes = storage.getAllSorted();
+        Assert.assertEquals(3, resumes.size());
         Resume[] extendsResumes = {RESUME_1, RESUME_2, RESUME_3};
-        Assert.assertArrayEquals(extendsResumes, resumes);
+        Assert.assertArrayEquals(extendsResumes, resumes.toArray());
     }
 
     @Test
