@@ -43,12 +43,15 @@ public class Resume implements Comparable<Resume>{
 
         Resume resume = (Resume) o;
 
-        return uuid.equals(resume.uuid);
+        if (!uuid.equals(resume.uuid)) return false;
+        return fullName.equals(resume.fullName);
     }
 
     @Override
     public int hashCode() {
-        return uuid.hashCode();
+        int result = uuid.hashCode();
+        result = 31 * result + fullName.hashCode();
+        return result;
     }
 
     @Override
@@ -56,9 +59,12 @@ public class Resume implements Comparable<Resume>{
         return uuid;
     }
 
-
     @Override
     public int compareTo(Resume o) {
-        return uuid.compareTo(o.uuid);
+        int compare = fullName.compareTo(o.getFullName());
+        if (compare != 0) {
+            compare = uuid.compareTo(o.getUuid());
+        }
+        return compare;
     }
 }

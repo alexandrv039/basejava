@@ -37,11 +37,6 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    protected String getSearchString(Resume resume) {
-        return resume.getUuid();
-    }
-
-    @Override
     public void clear() {
         map.clear();
     }

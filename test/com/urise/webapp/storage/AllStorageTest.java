@@ -1,6 +1,5 @@
-package com.urise.webapp;
+package com.urise.webapp.storage;
 
-import com.urise.webapp.storage.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -10,7 +9,7 @@ import org.junit.runners.Suite;
         ListStorageTest.class,
         SortedArrayStorageTest.class,
         MapStorageTest.class,
-        MapStorageNameSearchTest.class
+        MapResumeStorageTest.class
 })
 public class AllStorageTest {
 }

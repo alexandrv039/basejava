@@ -60,11 +60,6 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected String getSearchString(Resume resume) {
-        return resume.getUuid();
-    }
-
-    @Override
     protected Resume doGet(Object key) {
         return storage[(Integer) key];
     }

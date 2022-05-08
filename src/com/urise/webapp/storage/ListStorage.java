@@ -58,9 +58,4 @@ public class ListStorage extends AbstractStorage {
         }
         return -1;
     }
-
-    @Override
-    protected String getSearchString(Resume resume) {
-        return resume.getUuid();
-    }
 }
