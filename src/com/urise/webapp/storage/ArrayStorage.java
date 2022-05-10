@@ -23,7 +23,7 @@ public class ArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected void doDelete(Object index) {
+    protected void doDelete(Integer index) {
         storage[(int) index] = storage[size - 1];
         storage[size - 1] = null;
         size--;
