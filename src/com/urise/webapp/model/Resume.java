@@ -1,21 +1,23 @@
 package com.urise.webapp.model;
 
 import java.util.EnumMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
 /**
  * Initial resume class
  */
-public class Resume implements Comparable<Resume>{
+public class Resume implements Comparable<Resume> {
 
     // Unique identifier
     private final String uuid;
     private String fullName;
-    private EnumMap<ContactType, String> contacts;
-    private EnumMap<SectionType, Object> sections;
+    private final EnumMap<ContactType, String> contacts = new EnumMap<ContactType, String>(ContactType.class);
+    private final EnumMap<SectionType, AbstractSection> sections =
+            new EnumMap<SectionType, AbstractSection>(SectionType.class);
 
-    public Resume(){
+    public Resume() {
         this(UUID.randomUUID().toString(), "No name");
     }
 
@@ -34,7 +36,7 @@ public class Resume implements Comparable<Resume>{
         return uuid;
     }
 
-    public String getFullName(){
+    public String getFullName() {
         return fullName;
     }
 
@@ -42,20 +44,30 @@ public class Resume implements Comparable<Resume>{
         return contacts;
     }
 
-    public EnumMap<SectionType, Object> getSections() {
+    public EnumMap<SectionType, AbstractSection> getSections() {
         return sections;
-    }
-
-    public void setContacts(EnumMap<ContactType, String> contacts) {
-        this.contacts = contacts;
-    }
-
-    public void setSections(EnumMap<SectionType, Object> sections) {
-        this.sections = sections;
     }
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
+    }
+
+    public void printTitle() {
+        System.out.println(getFullName());
+        System.out.println("---------------------------" + System.lineSeparator());
+
+        for (Map.Entry<ContactType, String> entry : getContacts().entrySet()
+        ) {
+            System.out.println(entry.getKey().getTitle() + ": " + entry.getValue());
+        }
+        System.out.println("---------------------------" + System.lineSeparator());
+
+        for (Map.Entry<SectionType, AbstractSection> entry : getSections().entrySet()
+        ) {
+            System.out.println(entry.getKey().getTitle() + System.lineSeparator()
+                    + entry.getValue().getSectionContent() + System.lineSeparator());
+        }
+        System.out.println("---------------------------" + System.lineSeparator());
     }
 
     @Override
