@@ -78,6 +78,22 @@ public class Organization {
             this.description = description;
         }
 
+        public LocalDate getDateFrom() {
+            return dateFrom;
+        }
+
+        public LocalDate getDateTo() {
+            return dateTo;
+        }
+
+        public String getPosition() {
+            return position;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
         @Override
         public String toString() {
             return dateFrom + "-" + dateTo + "       " + position
