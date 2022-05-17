@@ -1,12 +1,13 @@
 package com.urise.webapp.model;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ListSection extends AbstractSection{
-    private List<String> list = new ArrayList<>();
+    private final List<String> list;
 
     public ListSection(List<String> list) {
+        Objects.requireNonNull(list);
         this.list = list;
     }
 
@@ -15,7 +16,22 @@ public class ListSection extends AbstractSection{
     }
 
     @Override
-    public String getSectionContent() {
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ListSection that = (ListSection) o;
+
+        return list.equals(that.list);
+    }
+
+    @Override
+    public int hashCode() {
+        return list.hashCode();
+    }
+
+    @Override
+    public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         for (String s:list
         ) {
