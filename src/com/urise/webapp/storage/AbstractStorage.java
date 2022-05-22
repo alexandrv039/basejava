@@ -75,5 +75,5 @@ public abstract class AbstractStorage<SK> implements Storage {
 
     protected abstract void doUpdate(SK key, Resume resume);
 
-    public abstract SK getKey(String searchString);
+    protected abstract SK getKey(String searchString);
 }

@@ -6,30 +6,21 @@ import java.util.List;
 
 public class Organization {
 
-    private String name;
+    private String title;
     private final List<Position> positions = new ArrayList<>();
-    private Website website;
+    private Link link;
 
-    public Organization(String name) {
-        this(name, "");
+    public Organization(String title) {
+        this(title, "");
     }
 
-    public Organization(String name, String url) {
-        website = new Website(name, url);
-        this.name = name;
+    public Organization(String title, String url) {
+        link = new Link(title, url);
+        this.title = title;
     }
 
     public List<Position> getPositions() {
         return positions;
-    }
-
-    public String getContent() {
-        String content = name;
-        for (Position position : positions
-        ) {
-            content += System.lineSeparator() + position;
-        }
-        return content;
     }
 
     @Override
@@ -39,24 +30,24 @@ public class Organization {
 
         Organization that = (Organization) o;
 
-        if (!name.equals(that.name)) return false;
+        if (!title.equals(that.title)) return false;
         if (!positions.equals(that.positions)) return false;
-        return website != null ? website.equals(that.website) : that.website == null;
+        return link != null ? link.equals(that.link) : that.link == null;
     }
 
     @Override
     public int hashCode() {
-        int result = name.hashCode();
+        int result = title.hashCode();
         result = 31 * result + positions.hashCode();
-        result = 31 * result + (website != null ? website.hashCode() : 0);
+        result = 31 * result + (link != null ? link.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
         return "Organization{" +
-                "name='" + name + '\'' +
-                ", website=" + website.getUrl() +
+                "title='" + title + '\'' +
+                ", website=" + link.getUrl() +
                 ", positions=" + positions +
                 '}';
     }

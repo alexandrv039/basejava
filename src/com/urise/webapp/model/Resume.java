@@ -1,7 +1,6 @@
 package com.urise.webapp.model;
 
 import java.util.EnumMap;
-import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -50,24 +49,6 @@ public class Resume implements Comparable<Resume> {
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
-    }
-
-    public void printTitle() {
-        System.out.println(getFullName());
-        System.out.println("---------------------------" + System.lineSeparator());
-
-        for (Map.Entry<ContactType, String> entry : getContacts().entrySet()
-        ) {
-            System.out.println(entry.getKey().getTitle() + ": " + entry.getValue());
-        }
-        System.out.println("---------------------------" + System.lineSeparator());
-
-        for (Map.Entry<SectionType, AbstractSection> entry : getSections().entrySet()
-        ) {
-            System.out.println(entry.getKey().getTitle() + System.lineSeparator()
-                    + entry.getValue() + System.lineSeparator());
-        }
-        System.out.println("---------------------------" + System.lineSeparator());
     }
 
     @Override

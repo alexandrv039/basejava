@@ -35,7 +35,7 @@ public class OrganizationSection extends AbstractSection{
         String content = "";
         for (Organization organization:organizations
              ) {
-            content += System.lineSeparator() + organization.getContent();
+            content += System.lineSeparator() + organization;
         }
         return content;
     }

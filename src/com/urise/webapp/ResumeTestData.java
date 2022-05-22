@@ -1,20 +1,45 @@
 package com.urise.webapp;
 
 import com.urise.webapp.model.*;
+import com.urise.webapp.util.DateUtil;
 
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 
 public class ResumeTestData {
 
     public static void main(String[] args) {
+        Resume testResume = getNewResume("uuid1", "Григорий Кислин");
+        printTitle(testResume);
+    }
 
-        Resume testResume = new Resume("uuid1", "Григорий Кислин");
-        setContacts(testResume.getContacts());
-        setSections(testResume.getSections());
-        testResume.printTitle();
+    public static Resume getNewResume(String uuid, String fullName) {
+        Resume resume = new Resume(uuid, fullName);
+        setContacts(resume.getContacts());
+        setSections(resume.getSections());
+        return resume;
+    }
+
+    public static void printTitle(Resume resume) {
+        System.out.println(resume.getFullName());
+        System.out.println("---------------------------" + System.lineSeparator());
+
+        for (Map.Entry<ContactType, String> entry : resume.getContacts().entrySet()
+        ) {
+            System.out.println(entry.getKey().getTitle() + ": " + entry.getValue());
+        }
+        System.out.println("---------------------------" + System.lineSeparator());
+
+        for (Map.Entry<SectionType, AbstractSection> entry : resume.getSections().entrySet()
+        ) {
+            System.out.println(entry.getKey().getTitle() + System.lineSeparator()
+                    + entry.getValue() + System.lineSeparator());
+        }
+        System.out.println("---------------------------" + System.lineSeparator());
     }
 
     private static void setContacts(EnumMap<ContactType, String> contacts) {
@@ -103,14 +128,14 @@ public class ResumeTestData {
         List<Organization> organizations = new ArrayList<Organization>();
 
         Organization JavaOnlineProjects = new Organization("Java Online Projects");
-        addPosition(JavaOnlineProjects, LocalDate.of(2013,10,1),LocalDate.now(),
+        addPosition(JavaOnlineProjects, DateUtil.of(2013, Month.OCTOBER), LocalDate.now(),
                 "Автор проекта", "Создание, " +
                 "организация и проведение Java онлайн проектов и стажировок.");
         organizations.add(JavaOnlineProjects);
 
         Organization Wrike = new Organization("Wrike");
-        addPosition(Wrike, LocalDate.of(2014,10,1),
-                LocalDate.of(2016,1,1),
+        addPosition(Wrike, DateUtil.of(2014,Month.OCTOBER),
+                DateUtil.of(2016, Month.JANUARY),
                 "Старший разработчик (backend)", "Проектирование" +
                 " и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis, " +
                 "Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2," +
@@ -118,8 +143,8 @@ public class ResumeTestData {
         organizations.add(Wrike);
 
         Organization RITCenter = new Organization("RIT Center");
-        addPosition(RITCenter, LocalDate.of(2012,4,1),
-                LocalDate.of(2014,10,1),
+        addPosition(RITCenter, DateUtil.of(2012,Month.APRIL),
+                DateUtil.of(2014, Month.OCTOBER),
                 "Java архитектор", "Организация процесса" +
                 " разработки системы ERP для разных окружений: релизная политика, версионирование, ведение CI " +
                 "(Jenkins), миграция базы (кастомизация Flyway), конфигурирование системы (pgBoucer, Nginx), AAA" +
@@ -131,8 +156,8 @@ public class ResumeTestData {
         organizations.add(RITCenter);
 
         Organization LuxoftDeutscheBank = new Organization("Luxoft (Deutsche Bank)");
-        addPosition(LuxoftDeutscheBank, LocalDate.of(2010,12,1),
-                LocalDate.of(2012,12,1),
+        addPosition(LuxoftDeutscheBank, DateUtil.of(2010,Month.DECEMBER),
+                DateUtil.of(2012,Month.DECEMBER),
                 "Ведущий программист", "Участие" +
                 " в проекте Deutsche Bank CRM (WebLogic, Hibernate, Spring, Spring MVC, SmartGWT, GWT, Jasper," +
                 " Oracle). Реализация клиентской и серверной части CRM. Реализация RIA-приложения для" +
@@ -141,8 +166,8 @@ public class ResumeTestData {
         organizations.add(LuxoftDeutscheBank);
 
         Organization Yota = new Organization("Yota");
-        addPosition(Yota, LocalDate.of(2008,6,1),
-                LocalDate.of(2010,12,1),
+        addPosition(Yota, DateUtil.of(2008,Month.JUNE),
+                DateUtil.of(2010,Month.DECEMBER),
                 "Ведущий специалист", "Дизайн и имплементация " +
                 "Java EE фреймворка для отдела \"Платежные Системы\" (GlassFish v2.1, v3, OC4J, EJB3, JAX-WS RI" +
                 " 2.1, Servlet 2.4, JSP, JMX, JMS, Maven2). Реализация администрирования, статистики и мониторинга " +
@@ -150,24 +175,24 @@ public class ResumeTestData {
         organizations.add(Yota);
 
         Organization Enkata = new Organization("Enkata");
-        addPosition(Enkata, LocalDate.of(2007,3,1),
-                LocalDate.of(2008,6,1),
+        addPosition(Enkata, DateUtil.of(2007,Month.MARCH),
+                DateUtil.of(2008,Month.JUNE),
                 "Разработчик ПО", "Реализация клиентской " +
                 "(Eclipse RCP) и серверной (JBoss 4.2, Hibernate 3.0, Tomcat, JMS) частей кластерного J2EE" +
                 " приложения (OLAP, Data mining).");
         organizations.add(Enkata);
 
         Organization SiemensAG = new Organization("Siemens AG");
-        addPosition(SiemensAG, LocalDate.of(2005,1,1),
-                LocalDate.of(2007,2,1),
+        addPosition(SiemensAG, DateUtil.of(2005,Month.JANUARY),
+                DateUtil.of(2007,Month.FEBRUARY),
                 "Разработчик ПО", "Разработка информационной" +
                 " модели, проектирование интерфейсов, реализация и отладка ПО на мобильной IN платформе Siemens " +
                 "@vantage (Java, Unix).");
         organizations.add(SiemensAG);
 
         Organization Alcatel = new Organization("Alcatel");
-        addPosition(Alcatel, LocalDate.of(1997,9,1),
-                LocalDate.of(2005,1,1),
+        addPosition(Alcatel, DateUtil.of(1997,Month.SEPTEMBER),
+                DateUtil.of(2005,Month.JANUARY),
                 "Инженер по аппаратному и программному тестированию",
                 "Тестирование, отладка, внедрение ПО цифровой телефонной станции Alcatel 1000 S12 (CHILL, ASM).");
         organizations.add(Alcatel);
@@ -180,45 +205,45 @@ public class ResumeTestData {
         List<Organization> organizations = new ArrayList<Organization>();
 
         Organization Coursera = new Organization("Coursera");
-        addPosition(Coursera, LocalDate.of(2013,3,1),
-                LocalDate.of(2013,5,1),
+        addPosition(Coursera, DateUtil.of(2013,Month.MARCH),
+                DateUtil.of(2013,Month.MAY),
                 "'Functional Programming Principles in Scala'" +
                 " by Martin Odersky");
         organizations.add(Coursera);
 
         Organization Luxoft = new Organization("Luxoft");
-        addPosition(Luxoft, LocalDate.of(2011,3,1),
-                LocalDate.of(2011,4,1),
+        addPosition(Luxoft, DateUtil.of(2011,Month.MARCH),
+                DateUtil.of(2011,Month.APRIL),
                 "Курс 'Объектно-ориентированный анализ ИС." +
                 " Концептуальное моделирование на UML.'");
         organizations.add(Luxoft);
 
         Organization SiemensAG = new Organization("Siemens AG");
-        addPosition(SiemensAG, LocalDate.of(2005,1,1),
-                LocalDate.of(2005,4,1),
+        addPosition(SiemensAG, DateUtil.of(2005,Month.JANUARY),
+                DateUtil.of(2005,Month.APRIL),
                 "3 месяца обучения мобильным IN сетям (Берлин)");
         organizations.add(SiemensAG);
 
         Organization Alcatel = new Organization("Alcatel");
-        addPosition(Alcatel, LocalDate.of(1997,9,1),
-                LocalDate.of(1998,3,1),
+        addPosition(Alcatel, DateUtil.of(1997,Month.SEPTEMBER),
+                DateUtil.of(1998,Month.MARCH),
                 "6 месяцев обучения цифровым телефонным сетям" +
                 " (Москва)");
         organizations.add(Alcatel);
 
         Organization SPBNIU = new Organization("Санкт-Петербургский национальный исследовательский" +
                 " университет информационных технологий, механики и оптики");
-        addPosition(SPBNIU, LocalDate.of(1993,9,1),
-                LocalDate.of(1996,7,1),
+        addPosition(SPBNIU, DateUtil.of(1993,Month.SEPTEMBER),
+                DateUtil.of(1996,Month.AUGUST),
                 "Аспирантура (программист С, С++)");
-        addPosition(SPBNIU, LocalDate.of(1987,9,1),
-                LocalDate.of(1993,7,1),
+        addPosition(SPBNIU, DateUtil.of(1987,Month.SEPTEMBER),
+                DateUtil.of(1993,Month.JULY),
                 "Инженер (программист Fortran, C)");
         organizations.add(SPBNIU);
 
         Organization Mipt = new Organization("Заочная физико-техническая школа при МФТИ");
-        addPosition(Mipt, LocalDate.of(1984,9,1),
-                LocalDate.of(1987,6,1),
+        addPosition(Mipt, DateUtil.of(1984,Month.SEPTEMBER),
+                DateUtil.of(1987,Month.JUNE),
                 "Закончил с отличием");
         organizations.add(Mipt);
 

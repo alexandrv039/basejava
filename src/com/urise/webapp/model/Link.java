@@ -2,12 +2,12 @@ package com.urise.webapp.model;
 
 import java.util.Objects;
 
-public class Website {
+public class Link {
     private String name;
     private String url;
 
-    public Website(String name, String url) {
-        Objects.requireNonNull(name);
+    public Link(String name, String url) {
+        Objects.requireNonNull(name, "name must not be NULL");
         this.name = name;
         this.url = url;
     }
@@ -33,10 +33,10 @@ public class Website {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Website website = (Website) o;
+        Link link = (Link) o;
 
-        if (!name.equals(website.name)) return false;
-        return url != null ? url.equals(website.url) : website.url == null;
+        if (!name.equals(link.name)) return false;
+        return url != null ? url.equals(link.url) : link.url == null;
     }
 
     @Override

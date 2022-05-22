@@ -7,7 +7,7 @@ public class ListSection extends AbstractSection{
     private final List<String> list;
 
     public ListSection(List<String> list) {
-        Objects.requireNonNull(list);
+        Objects.requireNonNull(list, "list must be not NULL");
         this.list = list;
     }
 
@@ -33,8 +33,7 @@ public class ListSection extends AbstractSection{
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        for (String s:list
-        ) {
+        for (String s:list) {
             stringBuilder.append("*").append(s).append("\n");
         }
         return stringBuilder.toString();
