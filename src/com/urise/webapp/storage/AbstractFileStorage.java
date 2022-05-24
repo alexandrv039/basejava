@@ -5,6 +5,7 @@ import com.urise.webapp.model.Resume;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -24,12 +25,14 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     public void clear() {
-
+        for (File file:directory.listFiles()) {
+            doDelete(file);
+        }
     }
 
     @Override
     public int size() {
-        return 0;
+        return directory.list().length;
     }
 
     @Override
@@ -39,7 +42,11 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     protected void doUpdate(File file, Resume r) {
-
+        try {
+            doWrite(r, file);
+        } catch (IOException e) {
+            throw new StorageException("IO error", file.getName(), e);
+        }
     }
 
     @Override
@@ -59,18 +66,35 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     protected abstract void doWrite(Resume r, File file) throws IOException;
 
+    protected abstract Resume doRead(File file) throws IOException;
+
     @Override
     protected Resume doGet(File file) {
-        return null;
+        try {
+            return doRead(file);
+        } catch (IOException e) {
+            throw new StorageException("IO error", file.getName(), e);
+        }
     }
 
     @Override
     protected void doDelete(File file) {
-
+        file.delete();
     }
 
     @Override
     protected List<Resume> getAll() {
-        return null;
+        List<Resume> resumeList = new ArrayList<>();
+        for (File file:directory.listFiles()) {
+            if (file.isFile()) {
+                try {
+                    Resume r = doRead(file);
+                    resumeList.add(r);
+                } catch (IOException e) {
+                    throw new StorageException("IO error", file.getName(), e);
+                }
+            }
+        }
+        return resumeList;
     }
 }
