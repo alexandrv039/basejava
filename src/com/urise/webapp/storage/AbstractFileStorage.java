@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Objects;
 
 public abstract class AbstractFileStorage extends AbstractStorage<File> {
-    private File directory;
+    private final File directory;
 
     protected AbstractFileStorage(File directory) {
         Objects.requireNonNull(directory, "directory must not be null");
@@ -25,14 +25,20 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     public void clear() {
-        for (File file:directory.listFiles()) {
-            doDelete(file);
+        File[] files = directory.listFiles();
+        if (files != null) {
+            for (File file : directory.listFiles()) {
+                doDelete(file);
+            }
         }
     }
 
     @Override
     public int size() {
-        return directory.list().length;
+        File[] files = directory.listFiles();
+        if (files != null) {
+            return directory.list().length;
+        } else return 0;
     }
 
     @Override
@@ -79,22 +85,22 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     protected void doDelete(File file) {
-        file.delete();
+        if (!file.delete()) {
+            throw new StorageException("File " + file.getName() + " not delete");
+        }
     }
 
     @Override
     protected List<Resume> getAll() {
-        List<Resume> resumeList = new ArrayList<>();
-        for (File file:directory.listFiles()) {
-            if (file.isFile()) {
-                try {
-                    Resume r = doRead(file);
-                    resumeList.add(r);
-                } catch (IOException e) {
-                    throw new StorageException("IO error", file.getName(), e);
+        List<Resume> resumes = new ArrayList<>();
+        File[] files = directory.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (file.isFile()) {
+                    resumes.add(doGet(file));
                 }
             }
         }
-        return resumeList;
+        return resumes;
     }
 }
