@@ -26,7 +26,9 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override
     public void clear() {
         File[] files = directory.listFiles();
-        if (files != null) {
+        if (files == null) {
+            throw new StorageException("directory not found");
+        }else {
             for (File file : directory.listFiles()) {
                 doDelete(file);
             }
@@ -36,9 +38,11 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override
     public int size() {
         File[] files = directory.listFiles();
-        if (files != null) {
+        if (files == null) {
+            throw new StorageException("directory not found");
+        }else {
             return directory.list().length;
-        } else return 0;
+        }
     }
 
     @Override
@@ -94,7 +98,9 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     protected List<Resume> getAll() {
         List<Resume> resumes = new ArrayList<>();
         File[] files = directory.listFiles();
-        if (files != null) {
+        if (files == null) {
+            throw new StorageException("directory not found");
+        }else {
             for (File file : files) {
                 if (file.isFile()) {
                     resumes.add(doGet(file));
