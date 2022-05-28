@@ -29,7 +29,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         if (files == null) {
             throw new StorageException("directory not found");
         }else {
-            for (File file : directory.listFiles()) {
+            for (File file : files) {
                 doDelete(file);
             }
         }
@@ -41,7 +41,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         if (files == null) {
             throw new StorageException("directory not found");
         }else {
-            return directory.list().length;
+            return files.length;
         }
     }
 
