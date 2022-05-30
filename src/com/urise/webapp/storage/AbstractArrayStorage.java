@@ -15,7 +15,6 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     protected final Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
 
-
     public int size() {
         return size;
     }
@@ -39,12 +38,12 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
 
     @Override
     protected boolean isExist(Integer key) {
-        return (int) key >= 0;
+        return key >= 0;
     }
 
     @Override
     protected void doUpdate(Integer key, Resume resume) {
-        storage[(Integer) key] = resume;
+        storage[key] = resume;
     }
 
     @Override
@@ -61,7 +60,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
 
     @Override
     protected Resume doGet(Integer key) {
-        return storage[(Integer) key];
+        return storage[key];
     }
 
     protected abstract int getIndex(String uuid);

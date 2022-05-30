@@ -9,16 +9,16 @@ import java.util.Map;
 
 public class MapResumeStorage extends AbstractStorage<Resume> {
 
-    private Map<String, Resume> map = new LinkedHashMap<>();
+    private final Map<String, Resume> storage = new LinkedHashMap<>();
 
     @Override
     protected void doDelete(Resume resume) {
-        map.remove(resume.getUuid());
+        storage.remove(resume.getUuid());
     }
 
     @Override
     protected void doSave(Resume key, Resume r) {
-        map.put(r.getUuid(), r);
+        storage.put(r.getUuid(), r);
     }
 
     @Override
@@ -28,17 +28,17 @@ public class MapResumeStorage extends AbstractStorage<Resume> {
 
     @Override
     protected void doUpdate(Resume key, Resume resume) {
-        map.put(resume.getUuid(), resume);
+        storage.put(resume.getUuid(), resume);
     }
 
     @Override
     public Resume getKey(String searchString) {
-        return map.get(searchString);
+        return storage.get(searchString);
     }
 
     @Override
     public void clear() {
-        map.clear();
+        storage.clear();
     }
 
     @Override
@@ -48,11 +48,11 @@ public class MapResumeStorage extends AbstractStorage<Resume> {
 
     @Override
     public List<Resume> getAll() {
-        return new ArrayList<>(map.values());
+        return new ArrayList<>(storage.values());
     }
 
     @Override
     public int size() {
-        return map.size();
+        return storage.size();
     }
 }

@@ -1,5 +1,7 @@
 package com.urise.webapp;
 
+import com.urise.webapp.exception.StorageException;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -13,8 +15,11 @@ public class MainFile {
     private static void printFilePath(File file, int indent) {
         System.out.println(getIndent(indent) + file.getName());
         if (file.isDirectory()) {
-            for (String path: file.list()) {
-                File f = new File(path);
+            File[] files = file.listFiles();
+            if (files == null) {
+                throw new StorageException("pathname does not denote a directory, or if an I/O error occurs");
+            }
+            for (File f: files) {
                 printFilePath(f, indent + 1);
             }
         }

@@ -7,7 +7,7 @@ import java.util.List;
 public class Organization {
 
     private String title;
-    private final List<Position> positions = new ArrayList<>();
+    private final List<Period> periods = new ArrayList<>();
     private Link link;
 
     public Organization(String title) {
@@ -19,8 +19,8 @@ public class Organization {
         this.title = title;
     }
 
-    public List<Position> getPositions() {
-        return positions;
+    public List<Period> getPeriods() {
+        return periods;
     }
 
     @Override
@@ -31,14 +31,14 @@ public class Organization {
         Organization that = (Organization) o;
 
         if (!title.equals(that.title)) return false;
-        if (!positions.equals(that.positions)) return false;
+        if (!periods.equals(that.periods)) return false;
         return link != null ? link.equals(that.link) : that.link == null;
     }
 
     @Override
     public int hashCode() {
         int result = title.hashCode();
-        result = 31 * result + positions.hashCode();
+        result = 31 * result + periods.hashCode();
         result = 31 * result + (link != null ? link.hashCode() : 0);
         return result;
     }
@@ -48,21 +48,21 @@ public class Organization {
         return "Organization{" +
                 "title='" + title + '\'' +
                 ", website=" + link.getUrl() +
-                ", positions=" + positions +
+                ", positions=" + periods +
                 '}';
     }
 
-    public static class Position {
+    public static class Period {
         private LocalDate dateFrom;
         private LocalDate dateTo;
         private String position;
         private String description;
 
-        public Position(LocalDate dateFrom, LocalDate dateTo, String position) {
+        public Period(LocalDate dateFrom, LocalDate dateTo, String position) {
             this(dateFrom, dateTo, position, "");
         }
 
-        public Position(LocalDate dateFrom, LocalDate dateTo, String position, String description) {
+        public Period(LocalDate dateFrom, LocalDate dateTo, String position, String description) {
             this.dateFrom = dateFrom;
             this.dateTo = dateTo;
             this.position = position;
@@ -96,7 +96,7 @@ public class Organization {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
 
-            Position position1 = (Position) o;
+            Period position1 = (Period) o;
 
             if (!dateFrom.equals(position1.dateFrom)) return false;
             if (!dateTo.equals(position1.dateTo)) return false;

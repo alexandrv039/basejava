@@ -252,8 +252,8 @@ public class ResumeTestData {
 
     private static void addPosition(Organization organization, LocalDate dateFrom, LocalDate dateTo,
                              String position, String description) {
-        List<Organization.Position> positions = organization.getPositions();
-        positions.add(new Organization.Position(dateFrom, dateTo, position, description));
+        List<Organization.Period> periods = organization.getPeriods();
+        periods.add(new Organization.Period(dateFrom, dateTo, position, description));
     }
 
     private static void addPosition(Organization organization, LocalDate dateFrom, LocalDate dateTo, String position) {

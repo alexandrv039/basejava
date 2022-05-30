@@ -27,11 +27,10 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     public void clear() {
         File[] files = directory.listFiles();
         if (files == null) {
-            throw new StorageException("directory not found");
-        }else {
-            for (File file : files) {
-                doDelete(file);
-            }
+            throw new StorageException("pathname does not denote a directory, or if an I/O error occurs");
+        }
+        for (File file : files) {
+            doDelete(file);
         }
     }
 
@@ -39,10 +38,9 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     public int size() {
         File[] files = directory.listFiles();
         if (files == null) {
-            throw new StorageException("directory not found");
-        }else {
-            return files.length;
+            throw new StorageException("pathname does not denote a directory, or if an I/O error occurs");
         }
+        return files.length;
     }
 
     @Override
@@ -99,12 +97,11 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         List<Resume> resumes = new ArrayList<>();
         File[] files = directory.listFiles();
         if (files == null) {
-            throw new StorageException("directory not found");
-        }else {
-            for (File file : files) {
-                if (file.isFile()) {
-                    resumes.add(doGet(file));
-                }
+            throw new StorageException("pathname does not denote a directory, or if an I/O error occurs");
+        }
+        for (File file : files) {
+            if (file.isFile()) {
+                resumes.add(doGet(file));
             }
         }
         return resumes;
