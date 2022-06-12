@@ -13,8 +13,8 @@ public class MainFile {
     }
 
     private static void printFilePath(File file, int indent) {
-        System.out.println(getIndent(indent) + file.getName());
         if (file.isDirectory()) {
+            System.out.println(getIndent(indent) + file.getName() + "/");
             File[] files = file.listFiles();
             if (files == null) {
                 throw new StorageException("pathname does not denote a directory, or if an I/O error occurs");
@@ -22,7 +22,7 @@ public class MainFile {
             for (File f: files) {
                 printFilePath(f, indent + 1);
             }
-        }
+        } else System.out.println(getIndent(indent) + file.getName());
     }
 
     private static String getIndent(int indent) {
