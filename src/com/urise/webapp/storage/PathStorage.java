@@ -1,5 +1,6 @@
 package com.urise.webapp.storage;
 
+import com.urise.webapp.StreamSerializer;
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
@@ -11,15 +12,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class AbstractPathFileStorage extends AbstractStorage<Path> {
+public class PathStorage extends AbstractStorage<Path> {
     private final Path directory;
+    private final StreamSerializer streamSerializer;
 
-    protected AbstractPathFileStorage(String dir) {
+    protected PathStorage(String dir, StreamSerializer streamSerializer) {
+        Objects.requireNonNull(dir, "directory must not be null");
+        Objects.requireNonNull(streamSerializer, "streamSerializer must be not null");
+
         directory = Paths.get(dir);
-        Objects.requireNonNull(directory, "directory must not be null");
         if (!Files.isDirectory(directory) || !Files.isWritable(directory)) {
             throw new IllegalArgumentException(dir + " is not directory");
         }
+        this.streamSerializer = streamSerializer;
     }
 
     @Override
@@ -47,11 +52,7 @@ public abstract class AbstractPathFileStorage extends AbstractStorage<Path> {
 
     @Override
     protected void doUpdate(Path path, Resume r) {
-        try {
-            doWrite(r, new BufferedOutputStream(Files.newOutputStream(path)));
-        } catch (IOException e) {
-            throw new StorageException("IO error", path.toString(), e);
-        }
+        doSave(path, r);
     }
 
     @Override
@@ -65,20 +66,24 @@ public abstract class AbstractPathFileStorage extends AbstractStorage<Path> {
             Files.createFile(path);
             doWrite(r, new BufferedOutputStream(Files.newOutputStream(path)));
         } catch (IOException e) {
-            throw new StorageException("IO error", path.toString(), e);
+            throw new StorageException("file save error", path.toString(), e);
         }
     }
 
-    protected abstract void doWrite(Resume r, OutputStream outputStream) throws IOException;
+    protected void doWrite(Resume r, OutputStream outputStream) throws IOException {
+        streamSerializer.doWrite(r, outputStream);
+    }
 
-    protected abstract Resume doRead(InputStream inputStream) throws IOException;
+    protected Resume doRead(InputStream inputStream) throws IOException {
+        return streamSerializer.doRead(inputStream);
+    }
 
     @Override
     protected Resume doGet(Path path) {
         try {
             return doRead(new BufferedInputStream(Files.newInputStream(path)));
         } catch (IOException e) {
-            throw new StorageException("IO error", path.toString(), e);
+            throw new StorageException("error read file", path.toString(), e);
         }
     }
 

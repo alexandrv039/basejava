@@ -1,5 +1,6 @@
 package com.urise.webapp.storage;
 
+import com.urise.webapp.StreamSerializer;
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
@@ -8,11 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class AbstractFileStorage extends AbstractStorage<File> {
+public class FileStorage extends AbstractStorage<File> {
     private final File directory;
+    private StreamSerializer streamSerializer;
 
-    protected AbstractFileStorage(File directory) {
+    protected FileStorage(File directory, StreamSerializer streamSerializer) {
         Objects.requireNonNull(directory, "directory must not be null");
+        Objects.requireNonNull(streamSerializer, "streamSerializer must be not null");
         if (!directory.isDirectory()) {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " is not directory");
         }
@@ -20,14 +23,12 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " is not readable/writable");
         }
         this.directory = directory;
+        this.streamSerializer = streamSerializer;
     }
 
     @Override
     public void clear() {
-        File[] files = directory.listFiles();
-        if (files == null) {
-            throw new StorageException("pathname does not denote a directory, or if an I/O error occurs");
-        }
+        File[] files = getDirectoryList();
         for (File file : files) {
             doDelete(file);
         }
@@ -35,10 +36,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     public int size() {
-        File[] files = directory.listFiles();
-        if (files == null) {
-            throw new StorageException("pathname does not denote a directory, or if an I/O error occurs");
-        }
+        File[] files = getDirectoryList();
         return files.length;
     }
 
@@ -49,11 +47,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     protected void doUpdate(File file, Resume r) {
-        try {
-            doWrite(r, new BufferedOutputStream(new FileOutputStream(file)));
-        } catch (IOException e) {
-            throw new StorageException("IO error", file.getName(), e);
-        }
+        doSave(file, r);
     }
 
     @Override
@@ -67,20 +61,24 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
             file.createNewFile();
             doWrite(r, new BufferedOutputStream(new FileOutputStream(file)));
         } catch (IOException e) {
-            throw new StorageException("IO error", file.getName(), e);
+            throw new StorageException("file save error", file.getName(), e);
         }
     }
 
-    protected abstract void doWrite(Resume r, OutputStream outputStream) throws IOException;
+    protected void doWrite(Resume r, OutputStream outputStream) throws IOException{
+        streamSerializer.doWrite(r, outputStream);
+    }
 
-    protected abstract Resume doRead(InputStream inputStream) throws IOException;
+    protected Resume doRead(InputStream inputStream) throws IOException{
+        return  streamSerializer.doRead(inputStream);
+    }
 
     @Override
     protected Resume doGet(File file) {
         try {
             return doRead(new BufferedInputStream(new FileInputStream(file)));
         } catch (IOException e) {
-            throw new StorageException("IO error", file.getName(), e);
+            throw new StorageException("error read file", file.getName(), e);
         }
     }
 
@@ -94,15 +92,20 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override
     protected List<Resume> getAll() {
         List<Resume> resumes = new ArrayList<>();
-        File[] files = directory.listFiles();
-        if (files == null) {
-            throw new StorageException("pathname does not denote a directory, or if an I/O error occurs");
-        }
+        File[] files = getDirectoryList();
         for (File file : files) {
             if (file.isFile()) {
                 resumes.add(doGet(file));
             }
         }
         return resumes;
+    }
+
+    private File[] getDirectoryList() {
+        File[] files = directory.listFiles();
+        if (files == null) {
+            throw new StorageException("pathname does not denote a directory, or if an I/O error occurs");
+        }
+        return files;
     }
 }
