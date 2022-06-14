@@ -1,6 +1,6 @@
 package com.urise.webapp.storage;
 
-import com.urise.webapp.StreamSerializer;
+import com.urise.webapp.storage.serializer.StreamSerializer;
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
@@ -52,7 +52,11 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     protected void doUpdate(Path path, Resume r) {
-        doSave(path, r);
+        try {
+            streamSerializer.doWrite(r, new BufferedOutputStream(Files.newOutputStream(path)));
+        } catch (IOException e) {
+            throw new StorageException("file save error", path.toString(), e);
+        }
     }
 
     @Override
@@ -64,24 +68,16 @@ public class PathStorage extends AbstractStorage<Path> {
     protected void doSave(Path path, Resume r) {
         try {
             Files.createFile(path);
-            doWrite(r, new BufferedOutputStream(Files.newOutputStream(path)));
+            streamSerializer.doWrite(r, new BufferedOutputStream(Files.newOutputStream(path)));
         } catch (IOException e) {
             throw new StorageException("file save error", path.toString(), e);
         }
     }
 
-    protected void doWrite(Resume r, OutputStream outputStream) throws IOException {
-        streamSerializer.doWrite(r, outputStream);
-    }
-
-    protected Resume doRead(InputStream inputStream) throws IOException {
-        return streamSerializer.doRead(inputStream);
-    }
-
     @Override
     protected Resume doGet(Path path) {
         try {
-            return doRead(new BufferedInputStream(Files.newInputStream(path)));
+            return streamSerializer.doRead(new BufferedInputStream(Files.newInputStream(path)));
         } catch (IOException e) {
             throw new StorageException("error read file", path.toString(), e);
         }
@@ -92,7 +88,7 @@ public class PathStorage extends AbstractStorage<Path> {
         try {
             Files.delete(path);
         } catch (IOException e) {
-            throw new StorageException("File " + path.toString() + " not delete");
+            throw new StorageException("File " + path + " not delete");
         }
     }
 

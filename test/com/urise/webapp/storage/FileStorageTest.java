@@ -1,6 +1,6 @@
 package com.urise.webapp.storage;
 
-import com.urise.webapp.serializer.ObjectStreamStorage;
+import com.urise.webapp.storage.serializer.ObjectStreamStorage;
 
 import java.io.File;
 
