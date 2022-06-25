@@ -1,16 +1,25 @@
 package com.urise.webapp.model;
 
+import com.urise.webapp.util.LocalDateAdapter;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Organization implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String title;
     private final List<Period> periods = new ArrayList<>();
     private Link link;
+
+    public Organization() {
+    }
 
     public Organization(String title) {
         this(title, "");
@@ -54,13 +63,19 @@ public class Organization implements Serializable {
                 '}';
     }
 
+    @XmlAccessorType(XmlAccessType.FIELD)
     public static class Period implements Serializable{
         private static final long serialVersionUID = 1L;
 
+        @XmlJavaTypeAdapter(LocalDateAdapter.class)
         private LocalDate dateFrom;
+        @XmlJavaTypeAdapter(LocalDateAdapter.class)
         private LocalDate dateTo;
         private String position;
         private String description;
+
+        public Period(){
+        }
 
         public Period(LocalDate dateFrom, LocalDate dateTo, String position) {
             this(dateFrom, dateTo, position, "");

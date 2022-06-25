@@ -6,7 +6,10 @@ import java.util.Objects;
 public class ListSection extends AbstractSection{
     private static final long serialVersionUID = 1L;
 
-    private final List<String> list;
+    private List<String> list;
+
+    public ListSection() {
+    }
 
     public ListSection(List<String> list) {
         Objects.requireNonNull(list, "list must be not NULL");
@@ -21,15 +24,13 @@ public class ListSection extends AbstractSection{
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         ListSection that = (ListSection) o;
-
-        return list.equals(that.list);
+        return Objects.equals(list, that.list);
     }
 
     @Override
     public int hashCode() {
-        return list.hashCode();
+        return Objects.hash(list);
     }
 
     @Override
