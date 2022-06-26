@@ -30,6 +30,22 @@ public class Organization implements Serializable {
         this.title = title;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public Link getLink() {
+        return link;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setLink(Link link) {
+        this.link = link;
+    }
+
     public List<Period> getPeriods() {
         return periods;
     }

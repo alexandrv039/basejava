@@ -12,3 +12,5 @@ log
 /bin/production/basejava/com/urise/webapp/storage/Storage.class
 /bin/
 /Diagrams/.$Resume diagram.drawio.bkp
+/lib/gson-2.7.jar
+/lib/gson-2.8.2.jar
