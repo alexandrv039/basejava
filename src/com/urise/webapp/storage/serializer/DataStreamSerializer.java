@@ -4,10 +4,8 @@ import com.urise.webapp.model.*;
 
 import java.io.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Consumer;
 
 public class DataStreamSerializer implements StreamSerializer{
     @Override
@@ -15,26 +13,38 @@ public class DataStreamSerializer implements StreamSerializer{
         try (DataOutputStream dos = new DataOutputStream(outputStream)) {
             dos.writeUTF(r.getUuid());
             dos.writeUTF(r.getFullName());
-            EnumMap<ContactType, String> contacts = r.getContacts();
+            Map<ContactType, String> contacts = r.getContacts();
             dos.writeInt(contacts.size());
+
+            writeWithException(entry-> {
+                dos.writeUTF(entry);
+            }, contacts, dos);
+
             for (Map.Entry<ContactType,String> entry: contacts.entrySet()
                  ) {
                 dos.writeUTF(entry.getKey().name());
                 dos.writeUTF(entry.getValue());
             }
 
-            EnumMap<SectionType, AbstractSection> sections = r.getSections();
+            Map<SectionType, AbstractSection> sections = r.getSections();
             dos.writeInt(sections.size());
             for (Map.Entry<SectionType,AbstractSection> entry: sections.entrySet()
             ) {
                 SectionType sectionType = entry.getKey();
                 dos.writeUTF(sectionType.name());
-                if (sectionType == SectionType.OBJECTIVE || sectionType == SectionType.PERSONAL) {
-                    dos.writeUTF(entry.getValue().toString());
-                } else if (sectionType == SectionType.ACHIEVEMENT || sectionType == SectionType.QUALIFICATIONS) {
-                    writeListSection(dos, (ListSection) entry.getValue());
-                } else if (sectionType == SectionType.EDUCATION || sectionType == SectionType.EXPERIENCE) {
-                    writeOrganizationSection(dos, (OrganizationSection) entry.getValue());
+                switch (sectionType) {
+                    case OBJECTIVE:
+                    case PERSONAL:
+                        dos.writeUTF((entry.getValue().toString()));
+                        break;
+                    case ACHIEVEMENT:
+                    case QUALIFICATIONS:
+                        writeListSection(dos, (ListSection) entry.getValue());
+                        break;
+                    case EDUCATION:
+                    case EXPERIENCE:
+                        writeOrganizationSection(dos, (OrganizationSection) entry.getValue());
+                        break;
                 }
             }
         }
@@ -52,12 +62,19 @@ public class DataStreamSerializer implements StreamSerializer{
             int sectionsSize = dis.readInt();
             for (int i = 0; i < sectionsSize; i++) {
                 SectionType sectionType = SectionType.valueOf(dis.readUTF());
-                if (sectionType == SectionType.OBJECTIVE || sectionType == SectionType.PERSONAL) {
-                    resume.addSection(sectionType, new TextSection(dis.readUTF()));
-                } else if (sectionType == SectionType.ACHIEVEMENT || sectionType == SectionType.QUALIFICATIONS) {
-                    resume.addSection(sectionType, readListSection(dis));
-                } else if (sectionType == SectionType.EDUCATION || sectionType == SectionType.EXPERIENCE) {
-                    resume.addSection(sectionType, readOrganizationSection(dis));
+                switch (sectionType) {
+                    case OBJECTIVE:
+                    case PERSONAL:
+                        resume.addSection(sectionType, new TextSection(dis.readUTF()));
+                        break;
+                    case ACHIEVEMENT:
+                    case QUALIFICATIONS:
+                        resume.addSection(sectionType, readListSection(dis));
+                        break;
+                    case EDUCATION:
+                    case EXPERIENCE:
+                        resume.addSection(sectionType, readOrganizationSection(dis));
+                        break;
                 }
             }
             return resume;
@@ -122,4 +139,12 @@ public class DataStreamSerializer implements StreamSerializer{
         }
         return new OrganizationSection(organizations);
     }
+
+    void writeWithException(Consumer<Object> action, Map collection, DataOutputStream dos) {
+
+        for (Object t : collection.keySet()) {
+            action.accept(t);
+        }
+    }
+
 }

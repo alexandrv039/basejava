@@ -6,16 +6,25 @@ import com.urise.webapp.util.DateUtil;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
+
 
 public class ResumeTestData {
 
     public static void main(String[] args) {
         Resume testResume = getNewResume("uuid1", "Григорий Кислин");
-        printTitle(testResume);
+
+        test1(x->x>0, 10);
+
+        //printTitle(testResume);
     }
+
+    public static void test1(Predicate<Integer> f, int x) {
+        System.out.println(f.test(x));
+    }
+
 
     public static Resume getNewResume(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
@@ -42,7 +51,7 @@ public class ResumeTestData {
         System.out.println("---------------------------" + System.lineSeparator());
     }
 
-    private static void setContacts(EnumMap<ContactType, String> contacts) {
+    private static void setContacts(Map<ContactType, String> contacts) {
 
         contacts.put(ContactType.PHONE, "+7(921) 855-0482");
         contacts.put(ContactType.SKYPE, "skype:grigory.kislin");
@@ -54,7 +63,7 @@ public class ResumeTestData {
 
     }
 
-    private static void setSections(EnumMap<SectionType, AbstractSection> sections) {
+    private static void setSections(Map<SectionType, AbstractSection> sections) {
 
         sections.put(SectionType.OBJECTIVE, new TextSection("Ведущий стажировок и корпоративного обучения по Java " +
                 "Web и Enterprise технологиям"));

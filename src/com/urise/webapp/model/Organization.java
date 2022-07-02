@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Organization implements Serializable {
@@ -98,6 +99,8 @@ public class Organization implements Serializable {
         }
 
         public Period(LocalDate dateFrom, LocalDate dateTo, String position, String description) {
+            Objects.requireNonNull(description, "description must not be NULL");
+            Objects.requireNonNull(position, "position must not be NULL");
             this.dateFrom = dateFrom;
             this.dateTo = dateTo;
             this.position = position;
