@@ -16,7 +16,7 @@ public class Organization implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String title;
-    private final List<Period> periods = new ArrayList<>();
+    private List<Period> periods = new ArrayList<>();
     private Link link;
 
     public Organization() {
@@ -51,6 +51,10 @@ public class Organization implements Serializable {
         return periods;
     }
 
+    public void setPeriods(List<Period> periods) {
+        this.periods = periods;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -81,7 +85,7 @@ public class Organization implements Serializable {
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)
-    public static class Period implements Serializable{
+    public static class Period implements Serializable {
         private static final long serialVersionUID = 1L;
 
         @XmlJavaTypeAdapter(LocalDateAdapter.class)
@@ -91,7 +95,7 @@ public class Organization implements Serializable {
         private String position;
         private String description;
 
-        public Period(){
+        public Period() {
         }
 
         public Period(LocalDate dateFrom, LocalDate dateTo, String position) {
@@ -104,7 +108,7 @@ public class Organization implements Serializable {
             this.dateFrom = dateFrom;
             this.dateTo = dateTo;
             this.position = position;
-            this.description = description;
+            this.description = description == null ? "" : description;
         }
 
         public LocalDate getDateFrom() {
