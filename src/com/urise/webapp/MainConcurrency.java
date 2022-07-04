@@ -7,7 +7,11 @@ public class MainConcurrency {
     public static final int THREADS_NUMBER = 10000;
     private static int counter;
     private static final Object LOCK = new Object();
-    private static int counter2 = 10000;
+    private String threadName = Thread.currentThread().getName();
+
+    public String getThreadName() {
+        return threadName;
+    }
 
     public static void main(String[] args) throws InterruptedException {
 
@@ -42,38 +46,46 @@ public class MainConcurrency {
         });
         System.out.println(counter);
 
-        Thread thread1 = new Thread(()->{
-            while (counter < 10000) {
-                counter++;
-            }
+        MainConcurrency concurrency1 = new MainConcurrency();
+        MainConcurrency concurrency2 = new MainConcurrency();
+        TestDeadlock testDeadlock1 = new TestDeadlock(concurrency1);
+        TestDeadlock testDeadlock2 = new TestDeadlock(concurrency2);
+
+        Thread thread1 = new Thread(() -> {
+            testDeadlock1.printThreadsNames(concurrency2, testDeadlock2);
         });
-        Thread thread2 = new Thread(()->{
-            while (counter < 10000) {
-                counter++;
-            }
+        Thread thread2 = new Thread(() -> {
+            testDeadlock2.printThreadsNames(concurrency1, testDeadlock1);
         });
         thread1.start();
         thread2.start();
 
-
     }
 
-    private static void inc() {
+    private synchronized static void inc() {
+        counter++;
+    }
 
-        synchronized (LOCK) {
-            counter++;
+}
 
-            if (counter > 5000) {
-                decr();
-            }
+class TestDeadlock {
+
+        private MainConcurrency mainConcurrency;
+
+        public TestDeadlock(MainConcurrency mainConcurrency) {
+            this.mainConcurrency = mainConcurrency;
         }
-    }
 
-    private synchronized static void decr() {
-        counter2--;
-
-        if (counter2 < 5000) {
-            inc();
+        public void setDeadlock(MainConcurrency mainConcurrency) {
+            this.mainConcurrency = mainConcurrency;
         }
-    }
+
+        public synchronized void printThreadsNames(MainConcurrency concurrency, TestDeadlock testDeadlock) {
+            System.out.println("thread1: = " + mainConcurrency.getThreadName() + ", thread2:" + concurrency.getThreadName());
+            testDeadlock.printName();
+        }
+
+        public synchronized void printName() {
+            System.out.println(mainConcurrency.getThreadName());
+        }
 }
