@@ -46,16 +46,14 @@ public class MainConcurrency {
         });
         System.out.println(counter);
 
-        MainConcurrency concurrency1 = new MainConcurrency();
-        MainConcurrency concurrency2 = new MainConcurrency();
-        TestDeadlock testDeadlock1 = new TestDeadlock(concurrency1);
-        TestDeadlock testDeadlock2 = new TestDeadlock(concurrency2);
+        TestDeadlock.Test testDeadlock1 = new TestDeadlock.Test("thread1");
+        TestDeadlock.Test testDeadlock2 = new TestDeadlock.Test("thread2");
 
         Thread thread1 = new Thread(() -> {
-            testDeadlock1.printThreadsNames(concurrency2, testDeadlock2);
+            testDeadlock1.printThreadsNames(testDeadlock2);
         });
         Thread thread2 = new Thread(() -> {
-            testDeadlock2.printThreadsNames(concurrency1, testDeadlock1);
+            testDeadlock2.printThreadsNames(testDeadlock1);
         });
         thread1.start();
         thread2.start();
@@ -70,22 +68,24 @@ public class MainConcurrency {
 
 class TestDeadlock {
 
-        private MainConcurrency mainConcurrency;
+    static class Test {
+        private String threadName;
 
-        public TestDeadlock(MainConcurrency mainConcurrency) {
-            this.mainConcurrency = mainConcurrency;
+        public Test(String threadName) {
+            this.threadName = threadName;
         }
 
-        public void setDeadlock(MainConcurrency mainConcurrency) {
-            this.mainConcurrency = mainConcurrency;
+        public synchronized String getThreadName() {
+            return threadName;
         }
 
-        public synchronized void printThreadsNames(MainConcurrency concurrency, TestDeadlock testDeadlock) {
-            System.out.println("thread1: = " + mainConcurrency.getThreadName() + ", thread2:" + concurrency.getThreadName());
-            testDeadlock.printName();
+        public synchronized void printThreadsNames(Test thread) {
+            System.out.println("thread1: = " + getThreadName() + ", thread2:" + thread.getThreadName());
+            thread.printName();
         }
 
         public synchronized void printName() {
-            System.out.println(mainConcurrency.getThreadName());
+            System.out.println(getThreadName());
         }
+    }
 }
