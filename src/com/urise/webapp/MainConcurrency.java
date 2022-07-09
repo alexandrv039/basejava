@@ -2,6 +2,7 @@ package com.urise.webapp;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 public class MainConcurrency {
     public static final int THREADS_NUMBER = 10000;
@@ -25,38 +26,30 @@ public class MainConcurrency {
         thread0.start();
         System.out.println(thread0.getState());
 
-        new Thread(() -> System.out.println(Thread.currentThread().getName())).start();
+        CountDownLatch countDownLatch = new CountDownLatch(THREADS_NUMBER);
+
+//        new Thread(() -> System.out.println(Thread.currentThread().getName())).start();
         List<Thread> threads = new ArrayList<>(THREADS_NUMBER);
         for (int i = 0; i < THREADS_NUMBER; i++) {
             Thread thread = new Thread(() -> {
                 for (int j = 0; j < 100; j++) {
                     inc();
                 }
+                countDownLatch.countDown();
             });
             thread.start();
             threads.add(thread);
         }
 
-        threads.forEach(thread -> {
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        });
+//        threads.forEach(thread -> {
+//            try {
+//                thread.join();
+//            } catch (InterruptedException e) {
+//                throw new RuntimeException(e);
+//            }
+//        });
+        countDownLatch.await();
         System.out.println(counter);
-
-        TestDeadlock.Test testDeadlock1 = new TestDeadlock.Test("thread1");
-        TestDeadlock.Test testDeadlock2 = new TestDeadlock.Test("thread2");
-
-        Thread thread1 = new Thread(() -> {
-            testDeadlock1.printThreadsNames(testDeadlock2);
-        });
-        Thread thread2 = new Thread(() -> {
-            testDeadlock2.printThreadsNames(testDeadlock1);
-        });
-        thread1.start();
-        thread2.start();
 
     }
 
