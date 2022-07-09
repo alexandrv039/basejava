@@ -20,7 +20,11 @@ public class MainStream {
     }
 
     static int minValue(int[] values) {
-        return Arrays.stream(values).distinct().sum();
+        int[] array =  Arrays.stream(values).distinct().sorted().toArray();
+        for (int i = 0; i < array.length - 1; i++) {
+            array[i] = (int) (array[i] * Math.pow(10, array.length - i - 1));
+        };
+        return Arrays.stream(array).sum();
     }
 
     static List<Integer> oddOrEven(List<Integer> integers) {
