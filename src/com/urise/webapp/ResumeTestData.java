@@ -28,8 +28,8 @@ public class ResumeTestData {
 
     public static Resume getNewResume(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
-        setContacts(resume.getContacts());
-        setSections(resume.getSections());
+//        setContacts(resume.getContacts());
+//        setSections(resume.getSections());
         return resume;
     }
 

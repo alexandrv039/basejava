@@ -31,8 +31,9 @@ public class PathStorage extends AbstractStorage<Path> {
     }
 
     @Override
-    public void clear() {
+    public int clear() {
         getDirectoryList().forEach(this::doDelete);
+        return 0;
     }
 
     @Override

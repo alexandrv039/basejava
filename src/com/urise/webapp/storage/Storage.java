@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface Storage {
 
-    void clear();
+    int clear();
     void save(Resume r);
 
     void update(Resume resume);
