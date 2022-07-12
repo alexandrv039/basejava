@@ -9,8 +9,8 @@ public class MainSql {
         SqlStorage storage = new SqlStorage(Config.get().getDbUrl(), Config.get().getDbUser(), Config.get().getDbPassword());
         Resume resume = ResumeTestData.getNewResume("uuid2", "Alexandr5");
 //        storage.update(new Resume("dummy"));
-//        storage.save(resume);
-        storage.clear();
+        storage.save(resume);
+//        storage.clear();
 //        System.out.println(storage.getAllSorted());
     }
 

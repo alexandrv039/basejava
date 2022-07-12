@@ -19,10 +19,9 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
         return size;
     }
 
-    public int clear() {
+    public void clear() {
         Arrays.fill(storage, 0, size, null);
         size = 0;
-        return 0;
     }
 
     /**

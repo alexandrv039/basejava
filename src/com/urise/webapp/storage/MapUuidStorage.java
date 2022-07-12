@@ -37,9 +37,8 @@ public class MapUuidStorage extends AbstractStorage<String> {
     }
 
     @Override
-    public int clear() {
+    public void clear() {
         storage.clear();
-        return 0;
     }
 
     @Override

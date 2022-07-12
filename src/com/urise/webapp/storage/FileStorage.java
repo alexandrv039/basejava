@@ -27,12 +27,11 @@ public class FileStorage extends AbstractStorage<File> {
     }
 
     @Override
-    public int clear() {
+    public void clear() {
         File[] files = getDirectoryList();
         for (File file : files) {
             doDelete(file);
         }
-        return 0;
     }
 
     @Override
