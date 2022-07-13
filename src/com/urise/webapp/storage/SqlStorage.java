@@ -1,6 +1,5 @@
 package com.urise.webapp.storage;
 
-import com.urise.webapp.Config;
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
 import com.urise.webapp.util.SqlHelper;
@@ -15,11 +14,6 @@ public class SqlStorage implements Storage {
 
     public SqlStorage(String dbUrl, String dbUser, String dbPassword) {
         sqlHelper = new SqlHelper(() -> DriverManager.getConnection(dbUrl, dbUser, dbPassword));
-    }
-
-    public SqlStorage(Config config) {
-        sqlHelper = new SqlHelper(() -> DriverManager.getConnection(config.getDbUrl(), config.getDbUser(),
-                config.getDbPassword()));
     }
 
     @Override
