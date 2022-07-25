@@ -9,9 +9,11 @@ public class MainSql {
         SqlStorage storage = Config.get().getStorage();
         Resume resume = ResumeTestData.getNewResume("uuid2", "Alexandr5");
 //        storage.update(new Resume("dummy"));
-        storage.save(resume);
+//        storage.save(resume);
 //        storage.clear();
-//        System.out.println(storage.getAllSorted());
+//        Resume resume1 = (Resume) storage.get("uuid2");
+//        System.out.println(resume);
+        System.out.println(storage.getAllSorted());
     }
 
 }
