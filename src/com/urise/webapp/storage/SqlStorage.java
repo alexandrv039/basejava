@@ -6,10 +6,7 @@ import com.urise.webapp.model.Resume;
 import com.urise.webapp.util.SqlHelper;
 
 import java.sql.*;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.*;
 
 public class SqlStorage implements Storage {
     public final SqlHelper sqlHelper;
@@ -65,9 +62,7 @@ public class SqlStorage implements Storage {
                     }
                     Resume resume = new Resume(uuid, rs.getString("full_name"));
                     do {
-                        String value = rs.getString("value");
-                        ContactType type = ContactType.valueOf(rs.getString("type"));
-                        resume.addContact(type, value);
+                        addContact(rs, resume);
                     } while (rs.next());
                     return resume;
                 });
@@ -101,10 +96,13 @@ public class SqlStorage implements Storage {
                             resume = new Resume(uuid, rs.getString("full_name"));
                             resumes.put(uuid, resume);
                         }
-                        resume.addContact(ContactType.valueOf(rs.getString("type")),
-                                rs.getString("value"));
+                        addContact(rs, resume);
                     }
-                    return resumes.values().stream().collect(Collectors.toList());
+                    Collection<Resume> collection = resumes.values();
+                    if (collection == null) {
+                        return new ArrayList<>();
+                    }
+                    return new ArrayList<>(collection);
                 });
     }
 
@@ -137,5 +135,10 @@ public class SqlStorage implements Storage {
             preparedStatement.setString(1, resume.getUuid());
             preparedStatement.execute();
         }
+    }
+
+    private void addContact(ResultSet rs, Resume resume) throws SQLException {
+        resume.addContact(ContactType.valueOf(rs.getString("type")),
+                rs.getString("value"));
     }
 }
