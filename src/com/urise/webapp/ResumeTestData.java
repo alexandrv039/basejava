@@ -29,7 +29,7 @@ public class ResumeTestData {
     public static Resume getNewResume(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
         setContacts(resume.getContacts());
-//        setSections(resume.getSections());
+        setSections(resume.getSections());
         return resume;
     }
 
@@ -71,8 +71,8 @@ public class ResumeTestData {
                 " инициативность. Пурист кода и архитектуры."));
         sections.put(SectionType.ACHIEVEMENT, getAchievementList());
         sections.put(SectionType.QUALIFICATIONS, getQualifications());
-        sections.put(SectionType.EXPERIENCE, getExperience());
-        sections.put(SectionType.EDUCATION, getEducation());
+//        sections.put(SectionType.EXPERIENCE, getExperience());
+//        sections.put(SectionType.EDUCATION, getEducation());
 
     }
 
