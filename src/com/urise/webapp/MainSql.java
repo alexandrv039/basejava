@@ -9,7 +9,7 @@ public class MainSql {
         SqlStorage storage = Config.get().getStorage();
         Resume resume = ResumeTestData.getNewResume("uuid3", "Ivan");
 //        storage.update(new Resume("dummy"));
-        storage.save(resume);
+//        storage.save(resume);
 //        storage.clear();
 //        Resume resume1 = (Resume) storage.get("uuid2");
 //        System.out.println(resume);

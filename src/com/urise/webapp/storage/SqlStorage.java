@@ -138,13 +138,10 @@ public class SqlStorage implements Storage {
 
     @Override
     public int size() {
-        return (int) sqlHelper.execute("SELECT COUNT(*) as count FROM resume",
+        return sqlHelper.execute("SELECT COUNT(*) as count FROM resume",
                 preparedStatement -> {
                     ResultSet rs = preparedStatement.executeQuery();
-                    if (!rs.next()) {
-                        throw new NotExistStorageException("Table resume is not exist");
-                    }
-                    return rs.getInt("count");
+                    return rs.next() ? rs.getInt("count") : 0;
                 });
     }
 
