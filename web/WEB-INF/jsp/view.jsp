@@ -21,31 +21,51 @@
         </c:forEach>
     </p>
 
-    <p>
-        <c:forEach var="sectionEntry" items="${resume.sections}">
-            <jsp:useBean id="sectionEntry"
-                         type="java.util.Map.Entry<com.urise.webapp.model.SectionType, java.lang.String>"/>
-    <h3><%=sectionEntry.getKey()%>
-    </h3>
+    <h2>Секции:</h2>
 
-    <c:if test="${sectionEntry.key==SectionType.PERSONAL || sectionEntry.key==SectionType.OBJECTIVE}">
-        <p>${sectionEntry.value}</p>
+    <ul id="sections">
 
-    </c:if>
+        <li title="PERSONAL">
+                <h3>${SectionType.PERSONAL.title}</h3>
+            <p id="PERSONAL" style="width: 300px; height: 100px;">
+                    ${resume.getSection(SectionType.PERSONAL)}
+            </p>
+        </li>
 
-    <c:if test="${sectionEntry.key==SectionType.QUALIFICATIONS || sectionEntry.key==SectionType.ACHIEVEMENT}">
-        <c:set var="listSection" value="${sectionEntry.value}"></c:set>
-        <jsp:useBean id="listSection"
-                     type="com.urise.webapp.model.ListSection"/>
-        <ul>
-            <c:forEach var="listEntry" items="${listSection.list}">
-                <li>${listEntry}</li>
-            </c:forEach>
-        </ul>
+        <li title="OBJECTIVE">
+            <h3>${SectionType.OBJECTIVE.title}</h3>
+            <p id="OBJECTIVE" style="width: 300px; height: 100px;">
+                    ${resume.getSection(SectionType.OBJECTIVE)}
+            </p>
+        </li>
 
-    </c:if>
-    <br>
-    </c:forEach>
+        <jsp:useBean id="listSection" class="com.urise.webapp.model.ListSection"/>
+
+        <li title="ACHIEVEMENT">
+            <h3>${SectionType.ACHIEVEMENT.title}</h3>
+            <c:set var="listSection" value="${resume.getSection(SectionType.ACHIEVEMENT)}"/>
+
+            <ul id="ACHIEVEMENT" name="ACHIEVEMENT">
+                <c:forEach var="sectionList" items="${listSection.list}">
+                    <li>${sectionList}</li>
+                </c:forEach>
+            </ul>
+        </li>
+
+        <li title="QUALIFICATIONS">
+            <h3>${SectionType.QUALIFICATIONS.title}</h3>
+            <c:set var="listSection" value="${resume.getSection(SectionType.QUALIFICATIONS)}"/>
+
+
+            <ul id="QUALIFICATIONS" name="QUALIFICATIONS">
+                <c:forEach var="sectionList" items="${listSection.list}">
+                    <li>${sectionList}</li>
+                </c:forEach>
+            </ul>
+        </li>
+
+    </ul>
+
     </p>
 </section>
 <jsp:include page="fragments/footer.jsp"/>

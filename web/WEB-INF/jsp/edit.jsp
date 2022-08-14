@@ -1,7 +1,5 @@
 <%@ page import="com.urise.webapp.model.ContactType" %>
 <%@ page import="com.urise.webapp.model.SectionType" %>
-<%@ page import="com.urise.webapp.model.TextSection" %>
-<%@ page import="com.urise.webapp.model.ListSection" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
@@ -58,35 +56,35 @@
             <li title="ACHIEVEMENT">
                 ${SectionType.ACHIEVEMENT.title}
                 <c:set var="listSection" value="${resume.getSection(SectionType.ACHIEVEMENT)}"/>
-                <button type="button" name="add" value="Добавить строку"
+                    <ul id="ACHIEVEMENT" name="ACHIEVEMENT">
+                        <c:forEach var="sectionList" items="${listSection.list}">
+                            <li><input value="${sectionList}"/></li>
+                        </c:forEach>
+                    </ul>
+                    <button type="button" name="add" value="Добавить строку"
                         onclick="addInput(document.getElementById('ACHIEVEMENT'))">Добавить строку</button>
-                <button type="button" name="del" value="Удалить строку"
+                    <button type="button" name="del" value="Удалить строку"
                         onclick="delInput(document.getElementById('ACHIEVEMENT'))">Удалить строку</button>
 
 
-                <ul id="ACHIEVEMENT" name="ACHIEVEMENT">
-                    <c:forEach var="sectionList" items="${listSection.list}">
-                        <li><input value="${sectionList}"/></li>
-                    </c:forEach>
-                </ul>
             </li>
 
             <li title="QUALIFICATIONS">
-                ${SectionType.QUALIFICATIONS.title}
+            ${SectionType.QUALIFICATIONS.title}
                 <c:set var="listSection" value="${resume.getSection(SectionType.QUALIFICATIONS)}"/>
-
-                <button type="button" name="add" value="Добавить строку"
-                        onclick="addInput(document.getElementById('QUALIFICATIONS'))">Добавить строку
-                </button>
-                <button type="button" name="del" value="Удалить строку"
-                        onclick="delInput(document.getElementById('QUALIFICATIONS'))">Удалить строку
-                </button>
-
                 <ul id="QUALIFICATIONS" name="QUALIFICATIONS">
                     <c:forEach var="sectionList" items="${listSection.list}">
                         <li><input value="${sectionList}"/></li>
                     </c:forEach>
                 </ul>
+
+                    <button type="button" name="add" value="Добавить строку"
+                        onclick="addInput(document.getElementById('QUALIFICATIONS'))">Добавить строку
+                </button>
+                    <button type="button" name="del" value="Удалить строку"
+                        onclick="delInput(document.getElementById('QUALIFICATIONS'))">Удалить строку
+                </button>
+
             </li>
 
         </ul>
@@ -134,7 +132,11 @@
             if (sectionName === 'PERSONAL' || sectionName === 'OBJECTIVE') {
                 content['CLASSNAME'] = "com.urise.webapp.model.TextSection";
                 let textObject = new Object();
-                textObject['text'] = section.value;
+                let text = section.value.trim();
+                if (text == '') {
+                    continue;
+                }
+                textObject['text'] = text;
                 content['INSTANCE'] = textObject;
                 result[sectionName] = content
             } else if (sectionName === 'ACHIEVEMENT' || sectionName === 'QUALIFICATIONS') {
@@ -143,7 +145,11 @@
                 let list = new Array();
                 let listSection = section.children;
                 for (i = 0; i < listSection.length; i++) {
-                    list.push(listSection[i].children[0].value);
+                    let text = listSection[i].children[0].value.trim();
+                    if (text == '') {
+                        continue;
+                    }
+                    list.push(text);
                 }
                 listObject['list'] = list;
                 content['INSTANCE'] = listObject;
@@ -156,6 +162,10 @@
     }
 
     async function submitResume() {
+
+        if (!validate()) {
+            return;
+        }
 
         let response = await fetch(window.location.href, {
             method: "POST",
@@ -183,6 +193,20 @@
             let lastElement = listEl[listEl.length - 1];
             lastElement.remove();
         }
+    }
+
+    function validate() {
+
+        let result = true;
+
+        let fullName = document.getElementById('fullName').value;
+        if (fullName.trim() == '') {
+            alert("Имя не может быть пустым");
+            result = false;
+        }
+
+        return result;
+
     }
 
 </script>
