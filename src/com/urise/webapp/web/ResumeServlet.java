@@ -4,6 +4,7 @@ import com.urise.webapp.model.Resume;
 import com.urise.webapp.storage.SqlStorage;
 import com.urise.webapp.util.JsonParser;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,8 +13,15 @@ import java.io.IOException;
 
 public class ResumeServlet extends HttpServlet {
 
-    private static SqlStorage storage = new SqlStorage("jdbc:postgresql://localhost:5432/resumes",
-            "postgres", "postgres");
+    private static SqlStorage storage;
+
+    @Override
+    public void init() throws ServletException {
+        storage = new SqlStorage("jdbc:postgresql://localhost:5432/resumes",
+                "postgres", "postgres");
+    }
+
+
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
