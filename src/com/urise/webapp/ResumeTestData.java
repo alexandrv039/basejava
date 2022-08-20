@@ -71,8 +71,8 @@ public class ResumeTestData {
                 " инициативность. Пурист кода и архитектуры."));
         sections.put(SectionType.ACHIEVEMENT, getAchievementList());
         sections.put(SectionType.QUALIFICATIONS, getQualifications());
-//        sections.put(SectionType.EXPERIENCE, getExperience());
-//        sections.put(SectionType.EDUCATION, getEducation());
+        sections.put(SectionType.EXPERIENCE, getExperience());
+        sections.put(SectionType.EDUCATION, getEducation());
 
     }
 
@@ -136,7 +136,7 @@ public class ResumeTestData {
 
         List<Organization> organizations = new ArrayList<Organization>();
 
-        Organization JavaOnlineProjects = new Organization("Java Online Projects");
+        Organization JavaOnlineProjects = new Organization("Java Online Projects", "https://topjava.ru/");
         addPosition(JavaOnlineProjects, DateUtil.of(2013, Month.OCTOBER), LocalDate.now(),
                 "Автор проекта", "Создание, " +
                 "организация и проведение Java онлайн проектов и стажировок.");
@@ -261,8 +261,8 @@ public class ResumeTestData {
 
     private static void addPosition(Organization organization, LocalDate dateFrom, LocalDate dateTo,
                              String position, String description) {
-        List<Organization.Period> periods = organization.getPeriods();
-        periods.add(new Organization.Period(dateFrom, dateTo, position, description));
+        List<Organization.Position> positions = organization.getPeriods();
+        positions.add(new Organization.Position(dateFrom, dateTo, position, description));
     }
 
     private static void addPosition(Organization organization, LocalDate dateFrom, LocalDate dateTo, String position) {

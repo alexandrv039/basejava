@@ -16,7 +16,7 @@ public class Organization implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String title;
-    private List<Period> periods = new ArrayList<>();
+    private List<Position> positions = new ArrayList<>();
     private Link link;
 
     public Organization() {
@@ -47,12 +47,12 @@ public class Organization implements Serializable {
         this.link = link;
     }
 
-    public List<Period> getPeriods() {
-        return periods;
+    public List<Position> getPeriods() {
+        return positions;
     }
 
-    public void setPeriods(List<Period> periods) {
-        this.periods = periods;
+    public void setPeriods(List<Position> positions) {
+        this.positions = positions;
     }
 
     @Override
@@ -63,14 +63,14 @@ public class Organization implements Serializable {
         Organization that = (Organization) o;
 
         if (!title.equals(that.title)) return false;
-        if (!periods.equals(that.periods)) return false;
+        if (!positions.equals(that.positions)) return false;
         return link != null ? link.equals(that.link) : that.link == null;
     }
 
     @Override
     public int hashCode() {
         int result = title.hashCode();
-        result = 31 * result + periods.hashCode();
+        result = 31 * result + positions.hashCode();
         result = 31 * result + (link != null ? link.hashCode() : 0);
         return result;
     }
@@ -80,12 +80,12 @@ public class Organization implements Serializable {
         return "Organization{" +
                 "title='" + title + '\'' +
                 ", website=" + link.getUrl() +
-                ", positions=" + periods +
+                ", positions=" + positions +
                 '}';
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)
-    public static class Period implements Serializable {
+    public static class Position implements Serializable {
         private static final long serialVersionUID = 1L;
 
         @XmlJavaTypeAdapter(LocalDateAdapter.class)
@@ -95,14 +95,14 @@ public class Organization implements Serializable {
         private String position;
         private String description;
 
-        public Period() {
+        public Position() {
         }
 
-        public Period(LocalDate dateFrom, LocalDate dateTo, String position) {
+        public Position(LocalDate dateFrom, LocalDate dateTo, String position) {
             this(dateFrom, dateTo, position, "");
         }
 
-        public Period(LocalDate dateFrom, LocalDate dateTo, String position, String description) {
+        public Position(LocalDate dateFrom, LocalDate dateTo, String position, String description) {
             Objects.requireNonNull(description, "description must not be NULL");
             Objects.requireNonNull(position, "position must not be NULL");
             this.dateFrom = dateFrom;
@@ -138,7 +138,7 @@ public class Organization implements Serializable {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
 
-            Period position1 = (Period) o;
+            Position position1 = (Position) o;
 
             if (!dateFrom.equals(position1.dateFrom)) return false;
             if (!dateTo.equals(position1.dateTo)) return false;

@@ -44,11 +44,11 @@ public class DataStreamSerializer implements StreamSerializer{
                                     dos.writeUTF(link.getUrl());
 
                                     writeWithException(dos, writer.getPeriods(),
-                                            period -> {
-                                                dos.writeUTF(period.getDateFrom().toString());
-                                                dos.writeUTF(period.getDateTo().toString());
-                                                dos.writeUTF(period.getPosition());
-                                                dos.writeUTF(period.getDescription());
+                                            position -> {
+                                                dos.writeUTF(position.getDateFrom().toString());
+                                                dos.writeUTF(position.getDateTo().toString());
+                                                dos.writeUTF(position.getPosition());
+                                                dos.writeUTF(position.getDescription());
                                             });
                                 });
                         break;
@@ -88,7 +88,7 @@ public class DataStreamSerializer implements StreamSerializer{
                     organization.setLink(new Link(dis.readUTF(), dis.readUTF()));
 
                     organization.setPeriods(readList(dis, () ->
-                            new Organization.Period(LocalDate.parse(dis.readUTF()),
+                            new Organization.Position(LocalDate.parse(dis.readUTF()),
                                     LocalDate.parse(dis.readUTF()), dis.readUTF(), dis.readUTF())
                     ));
                     return organization;

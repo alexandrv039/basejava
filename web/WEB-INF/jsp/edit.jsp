@@ -87,6 +87,87 @@
 
             </li>
 
+            <li title="EXPERIENCE">
+                <h3>${SectionType.EXPERIENCE.title}</h3>
+                <c:set var="organizationsExpirience" value="${resume.getSection(SectionType.EXPERIENCE)}"/>
+                <ul id="EXPERIENCE">
+                    <c:forEach var="organizationExpirience" items="${organizationsExpirience.organizations}">
+                        <jsp:useBean id="organizationExpirience" class="com.urise.webapp.model.Organization"/>
+                        <li>
+                            <label>
+                                Наименование организации:
+                            <input title="organization_name" style="display: inline" value="${organizationExpirience.title}">
+                            </label>
+                            <section title="link" style="display: inline">
+                                <label>
+                                    url:
+                                    <input value="${organizationExpirience.link.url}">
+                                </label>
+                            </section>
+                            <ul title="organization_positions">
+                                <c:forEach var="position" items="${organizationExpirience.periods}">
+                                    <li>
+                                        <label>
+                                            Должность:
+                                            <input value="${position.position}" style="width: 500px">
+                                        </label>
+                                        <div>
+                                            <span>Период:</span>
+                                            <input type="date" value="${position.dateFrom}">
+                                            <input type="date" value="${position.dateTo}">
+                                        </div>
+                                        <span>Описание:</span>
+                                        <textarea style="width: 500px; height: 100px">${position.description}</textarea>
+                                    </li>
+                                </c:forEach>
+                            </ul>
+                            <br>
+                        </li>
+                    </c:forEach>
+                </ul>
+                <br>
+            </li>
+
+
+            <li title="EDUCATION">
+                <h3>${SectionType.EDUCATION.title}</h3>
+                <c:set var="organizationsEducation" value="${resume.getSection(SectionType.EDUCATION)}"/>
+                <ul id="EDUCATION">
+                    <c:forEach var="organizationEducation" items="${organizationsEducation.organizations}">
+                        <jsp:useBean id="organizationEducation" class="com.urise.webapp.model.Organization"/>
+                        <li>
+                            <label>
+                                Наименование учебного заведения:
+                                <input title="organization_name" style="display: inline" value="${organizationEducation.title}">
+                            </label>
+                            <section title="link" style="display: inline">
+                                <label>
+                                    url:
+                                    <input value="${organizationEducation.link.url}" alt="url">
+                                </label>
+                            </section>
+                            <ul title="organization_positions">
+                                <c:forEach var="position" items="${organizationEducation.periods}">
+                                    <li>
+                                        <label>
+                                            Специальность:
+                                            <input value="${position.position}" style="width: 500px">
+                                        </label>
+                                        <div>
+                                            <span>Период:</span>
+                                            <input type="date" value="${position.dateFrom}">
+                                            <input type="date" value="${position.dateTo}">
+                                        </div>
+                                    </li>
+                                </c:forEach>
+                            </ul>
+                            <br>
+                        </li>
+                    </c:forEach>
+                </ul>
+                <br>
+            </li>
+
         </ul>
 
 
@@ -154,6 +235,16 @@
                 listObject['list'] = list;
                 content['INSTANCE'] = listObject;
                 result[sectionName] = content;
+            } else if (sectionName == 'EXPERIENCE' || sectionName == 'EDUCATION') {
+                content['CLASSNAME'] = "com.urise.webapp.model.OrganizationSection";
+                organizationObject = new Object();
+
+                let listExperience = document.getElementById('EXPERIENCE').children;
+                for (let i = 0; i < listExperience.length; i++) {
+                    organizationObject['position'] = listExperience[i].children[0].children[0].value.trim();
+
+                }
+
             }
         }
 
@@ -200,9 +291,25 @@
         let result = true;
 
         let fullName = document.getElementById('fullName').value;
-        if (fullName.trim() == '') {
+        if (fullName.trim() === '') {
             alert("Имя не может быть пустым");
             result = false;
+        }
+
+        let listExperience = document.getElementById('EXPERIENCE').children;
+        for (let i = 0; i < listExperience.length; i++) {
+            if (listExperience[i].children[0].children[0].value.trim() === '') {
+                alert("Наименование организации не может быть пустым");
+                result = false;
+            }
+        }
+
+        let listEducation = document.getElementById('EDUCATION').children;
+        for (let i = 0; i < listEducation.length; i++) {
+            if (listEducation[i].children[0].children[0].value.trim() === '') {
+                alert("Наименование организации не может быть пустым");
+                result = false;
+            }
         }
 
         return result;

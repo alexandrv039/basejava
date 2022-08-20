@@ -204,4 +204,5 @@ public class SqlStorage implements Storage {
             resume.addSection(sectionType, JsonParser.read(content, AbstractSection.class));
         }
     }
+
 }
